@@ -1,0 +1,160 @@
+openapi: 3.0.0
+info:
+  title: API NetLeak
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/
+components:
+  securitySchemes:
+    bearerAuth:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+  /v1/api/signup:
+    post:
+      summary: Register a new user (Send email inform)
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: trannhutphattv@gmail.com
+                password:
+                  type: string
+                  default: 123456
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: string
+                    default: 65e9bfd4facc450c979573ea
+                  email:
+                    type: string
+                    default: trannhutphattv@gmail.com
+        201:
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                properties:
+                  statusCode:
+                    type: integer
+                    default: 201
+                  message:
+                    type: string
+                    default: User already exists
+  /v1/api/login:
+    post:
+      summary: Login a user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  default: trannhutphattv@gmail.com
+                password:
+                  type: string
+                  default: 123456
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+             schema:
+                items: 
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          default: 65e9bfd4facc450c979573ea
+                        email:
+                          type: string
+                          default: trannhutphattv@gmail.com
+                        favorites:
+                          type: array
+                          default: []
+                        roles:
+                          type: array
+                          default: ["user"]
+                    accessToken: 
+                      type: string
+                      default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWE5NGY1MDUwMThmZjYzYTJmNDc2OSIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzA5ODc0NDk3LCJleHAiOjE3MDk4OTI0OTd9.DV0VSw2jkUQ88kpqUP3yyyreDVOpXiEMk0Z4kkHYjYo
+        201:
+          description: User not registered
+          content:
+            application/json:
+              schema:
+                properties:
+                  statusCode:
+                    type: integer
+                    default: 201
+                  messgage: 
+                    type: string
+                    default: User not registered
+        401:
+          description: Wrong Password
+          content:
+            application/json:
+              schema:
+                properties:
+                  statusCode:
+                    type: integer
+                    default: 401
+                  messgage: 
+                    type: string
+                    default: Wrong Password
+  /v1/api/user/listAllUsers:
+    get:
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: Authorization
+        in: header
+        description: An authorization header with access_token, ex - Bearer {accessToken get from login}
+      summary: List all users
+      tags:
+        - User
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    _id:
+                      type: string
+                      default: 65ea94f505018ff63a2f4769
+                    email:
+                      type: string
+                      default: nhutphattranph@gmail.com
+                    favorites: 
+                      type: array
+                      default: []
+                    roles:
+                      type: array
+                      default: ["user"] 
+          

@@ -1,0 +1,20 @@
+### SIGNUP
+POST http://localhost:8081/v1/api/signup
+Content-Type: application/json
+
+{
+    "email": "nhutphattranphtvvv@gmail.com",
+    "password": "phat12345666"
+}
+### login
+POST http://localhost:8081/v1/api/login
+Content-Type: application/json
+
+{
+    "email": "nhutphattranph@gmail.com",
+    "password": "phat12345"
+}
+
+### list all users
+GET http://localhost:8081/v1/api/user/listAllUsers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWE5NGY1MDUwMThmZjYzYTJmNDc2OSIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzA5ODg0MzUyLCJleHAiOjE3MDk5MDIzNTJ9.qfYndVWejsIXiVC_HbsS4j9kbNKyAe5Mc0px9D-NLB0
