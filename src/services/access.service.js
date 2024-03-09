@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken')
 const getData = require('../utils/index');
 const role = require('../configs/config.role');
+const AuthService = require('./auth.service')
 
 class AccessService {
     // [POST]/v1/api/signup
@@ -58,7 +59,7 @@ class AccessService {
        }
     }
     // [POST]/v1/api/login
-    static login = async({email, password}) => {
+    static login = async({email, password}, res) => {
         try {
             const existUser = await userModel.findOne({email})
             if (!existUser) {
@@ -77,35 +78,26 @@ class AccessService {
 
             const payload = {id: existUser.id, email};
 
-            const accessToken = await jwt.sign( payload, process.env.JWT_SECRET_KEY, {
-                expiresIn: '5h',
+            const accessToken = AuthService.createAccessToken(payload);
+
+            const refreshToken = AuthService.createRefreshToken(payload);
+
+            res.cookie("refreshToken", refreshToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60 * 24 * 14,
+                expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14)
             })
-    
-            // const refreshToken = await jwt.sign( payload, privateKey, {
-            //     expiresIn: '14 days',
-            //     algorithm: 'RS256'
-            // })
 
-            // const cookies = cookie("access-token", accessToken, {
-            //     httpOnly: true,
-            //     secure: false,
-            //     maxAge: 1000 * 60 * 60 * 24 * 14,
-            //     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14)
-            // })
-
-            // return {
-            //     accessToken,
-            //     refreshToken
-            // }
             return {
                 user: getData({fields: ['_id', 'email', 'favorites', 'roles'], object: existUser}),
-                accessToken
+                accessToken,
             }
             
         } catch (error) {
             console.log(error.message)
         }
-        
     }
 }
 

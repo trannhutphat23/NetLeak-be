@@ -13,7 +13,7 @@ class AccessController {
     login = async (req, res, next) => {
         try {
             console.log(`[P]::login::`,req.body)
-            return res.status(201).json(await AccessService.login(req.body))
+            return res.status(201).json(await AccessService.login(req.body, res))
         } catch (error) {
             next(error)
         }
