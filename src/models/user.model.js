@@ -23,8 +23,9 @@ var userSchema = new Schema({
         },
     ],
     roles: {
-        type: Array,
-        default: []
+        type: [String],
+        enum: ["user", "admin"],
+        default: ["user"]
     },
 }, {
     timestamps: true,

@@ -1,4 +1,5 @@
 const userModel = require('../models/user.model');
+const userTokenModel = require('../models/userToken.model');
 const bcrypt = require('bcrypt')
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
@@ -53,9 +54,10 @@ class AccessService {
 
             return getData({ fields: ['_id', 'email'], object: newUser})
        } catch (error) {
-            return {
-                error: error.message
-            }
+            return json({
+                error: true,
+                message: "Internal Server Error"
+            })
        }
     }
     // [POST]/v1/api/login
@@ -90,6 +92,11 @@ class AccessService {
                 expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14)
             })
 
+            await userTokenModel.create({
+                user_id: existUser._id,
+                refreshToken: refreshToken
+            })
+
             return {
                 user: getData({fields: ['_id', 'email', 'favorites', 'roles'], object: existUser}),
                 accessToken,
@@ -99,6 +106,20 @@ class AccessService {
             console.log(error.message)
         }
     }
+    
+    // [POST]v1/api/logout
+    static logout = async(req, res) => {
+        const ck = req.cookies.refreshToken
+        if (!ck) {
+            return {
+                message: 'You are not logged in'   
+            }
+        }
+        res.clearCookie('refreshToken')
+        return {
+            message: "Logout successfully"
+        }
+    }   
 }
 
 module.exports = AccessService;

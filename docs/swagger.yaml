@@ -125,6 +125,29 @@ paths:
                   messgage: 
                     type: string
                     default: Wrong Password
+  /v1/api/refreshToken:
+    post:
+      summary: Get a new access token
+      tags:
+        - Auth
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  accessToken:
+                    type: string
+                    default: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzEwMDg1Mzg4LCJleHAiOjE3MTAwODU0MTh9.T_oz89fEBUNJfSQw_oMxmsVWqpsCG5BNX8qfJYzrjLM
+                  user:
+                    properties:
+                      id:
+                        type: string
+                        default: 65ec3ac68544a7f1e4c76160
+                      email:
+                        type: string
+                        default: trannhutphattv@gmail.com
   /v1/api/user/listAllUsers:
     get:
       security:

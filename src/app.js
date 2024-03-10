@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const file = fs.readFileSync(path.resolve('./docs/swagger.yaml'), 'utf8');
 const swaggerDocument = YAML.parse(file);
+const cors = require("cors"); 
 const { default: helmet } = require('helmet')
 const cookieParser = require("cookie-parser");
 const express = require('express');
@@ -19,6 +20,7 @@ app.use(express.urlencoded({
 }))
 app.use(helmet())
 app.use(cookieParser())
+app.use(cors())
 
 // init db mongodb
 require('./databases/init.mongodb')

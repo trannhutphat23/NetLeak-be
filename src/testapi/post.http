@@ -17,6 +17,8 @@ Content-Type: application/json
 
 ### REFRESH TOKEN
 POST http://localhost:8081/v1/api/refreshToken
+### LOGOUT
+POST http://localhost:8081/v1/api/logout
 ### list all users
 GET http://localhost:8081/v1/api/user/listAllUsers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzA5OTgzMzU0LCJleHAiOjE3MTAwMDEzNTR9.qeo6qUh5eRmLzFslk6sHdslQ8IIz74naCUhp2zq_u2w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzEwMDgwNjExLCJleHAiOjE3MTAwODA2NDF9.VXEUdTtwhOUQNy8C6oGjZbKjKcGoBqyKBBELaiaR62I

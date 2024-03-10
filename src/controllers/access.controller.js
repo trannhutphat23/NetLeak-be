@@ -18,6 +18,15 @@ class AccessController {
             next(error)
         }
     }
+
+    logout = async (req, res, next) => {
+        try {
+            console.log(`[P]::logout::`,req.body)
+            return res.status(201).json(await AccessService.logout(req, res))
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = new AccessController()

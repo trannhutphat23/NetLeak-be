@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken')
+const getData = require('../utils/index');
 
 class AuthService {
     static createAccessToken = (payload) => {
         const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_KEY, {
-            expiresIn: '30s'
+            expiresIn: '5h'
         })
         return accessToken
     }
@@ -34,7 +35,7 @@ class AuthService {
             })
         }
     }
-
+    // [POST]v1/api/refreshToken
     static HandleRefreshToken = (req,res) => {
         const refreshToken = req.cookies.refreshToken
         if (!refreshToken) {
@@ -60,7 +61,7 @@ class AuthService {
 
             return res.status(200).json({
                 accessToken: newAccessToken,
-                user: user
+                user: getData({ fields: ['id', 'email'], object: user})
             })
         })
     }
