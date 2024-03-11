@@ -3,8 +3,8 @@ POST http://localhost:8081/v1/api/signup
 Content-Type: application/json
 
 {
-    "email": "nhutphattranphoke@gmail.com",
-    "password": "phat12345oke"
+    "email": "nhutphattran1@gmail.com",
+    "password": "phat12345"
 }
 ### LOGIN
 POST http://localhost:8081/v1/api/login
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
     "email": "nhutphattranph@gmail.com",
-    "password": "phat12345"
+    "password": "phat123456789"
 }
 
 ### REFRESH TOKEN
@@ -22,3 +22,13 @@ POST http://localhost:8081/v1/api/logout
 ### list all users
 GET http://localhost:8081/v1/api/user/listAllUsers
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzEwMDgwNjExLCJleHAiOjE3MTAwODA2NDF9.VXEUdTtwhOUQNy8C6oGjZbKjKcGoBqyKBBELaiaR62I
+### UPDATE PASSWORD
+PATCH http://localhost:8081/v1/api/user/updatePassword
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzEwMTQzNTY3LCJleHAiOjE3MTAxNjE1Njd9.FDHqp5rSjwBex2R3T3PXQd7YiaRFrDRgN1S5VvijcB4
+Content-Type: application/json
+
+{
+    "id": "65ec3ac68544a7f1e4c76160",
+    "oldPassword": "phat123456",
+    "newPassword": "phat1234567"
+}

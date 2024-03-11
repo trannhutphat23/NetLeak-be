@@ -9,6 +9,14 @@ class UserController {
             next(error)
         }
     }
+    // update password
+    updatePassword = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.updatePassword(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();

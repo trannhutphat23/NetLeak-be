@@ -179,5 +179,52 @@ paths:
                       default: []
                     roles:
                       type: array
-                      default: ["user"] 
-          
+                      default: ["user"]
+  /v1/api/user/updatePassword:
+    patch:
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: Authorization
+        in: header
+        description: An authorization header with access_token, ex - Bearer {accessToken get from login}
+      summary: update password for user
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                id:
+                  type: string
+                  default: 65edf7925e8b0ce8a8f23499
+                password:
+                  type: string
+                  default: 123456
+      responses:
+        200:
+          description: OK
+          content:
+            appication/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    default: "Update password successfully"
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        default: 65e9bfd4facc450c979573ea
+                      email:
+                        type: string
+                        default: trannhutphattv@gmail.com
+                      favorites:
+                        type: array
+                        default: []
+                      roles:
+                        type: array
+                        default: ["user"]
