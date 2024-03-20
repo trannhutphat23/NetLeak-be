@@ -10,7 +10,7 @@ const AuthService = require('./auth.service')
 
 class AccessService {
     // [POST]/v1/api/signup
-    static signup = async({email, password}) => {
+    static signup = async({email, password, name, age, gender, phone}) => {
        try {
             const existUser = await userModel.findOne({ email }).lean()
             if (existUser) {
@@ -26,6 +26,10 @@ class AccessService {
             const newUser = await userModel.create({
                 email: email,
                 password: passwordHash,
+                name: name,
+                age: age,
+                gender: gender,
+                phone: phone,
                 roles: [role.USER]
             })
 
@@ -52,7 +56,7 @@ class AccessService {
                 }
             });
 
-            return getData({ fields: ['_id', 'email'], object: newUser})
+            return getData({ fields: ['_id', 'email', 'name', 'age', 'gender', 'phone'], object: newUser})
        } catch (error) {
             return json({
                 error: true,

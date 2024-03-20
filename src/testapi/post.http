@@ -4,7 +4,11 @@ Content-Type: application/json
 
 {
     "email": "nhutphattran1@gmail.com",
-    "password": "phat12345"
+    "password": "phat12345",
+    "name": "phat",
+    "age": 20,
+    "gender": "male",
+    "phone": "123456789"
 }
 ### LOGIN
 POST http://localhost:8081/v1/api/login

@@ -16,6 +16,26 @@ var userSchema = new Schema({
         trim: true,
         minLength: 6
     },
+    name:{
+        type:String,
+        required:true,
+        trim: true,
+    },
+    age:{
+        type: Number,
+        required:true,
+        trim: true,
+    },
+    gender: {
+        type: String,
+        enum: ["male", "female"],
+        default: "male"
+    },
+    phone: {
+        type: String,
+        required: true,
+        trim: true
+    },
     favorites: [
         {
             type: Schema.Types.ObjectId,
