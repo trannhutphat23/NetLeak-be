@@ -58,10 +58,10 @@ class AccessService {
 
             return getData({ fields: ['_id', 'email', 'name', 'age', 'gender', 'phone'], object: newUser})
        } catch (error) {
-            return json({
+            return {
                 error: true,
                 message: "Internal Server Error"
-            })
+            }
        }
     }
     // [POST]/v1/api/login
@@ -110,7 +110,6 @@ class AccessService {
             console.log(error.message)
         }
     }
-    
     // [POST]v1/api/logout
     static logout = async(req, res) => {
         const ck = req.cookies.refreshToken

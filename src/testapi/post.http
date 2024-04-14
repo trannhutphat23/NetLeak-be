@@ -3,7 +3,7 @@ POST http://localhost:8081/v1/api/signup
 Content-Type: application/json
 
 {
-    "email": "nhutphattran1@gmail.com",
+    "email": "trannhutphattv@gmail.com",
     "password": "phat12345",
     "name": "phat",
     "age": 20,
@@ -15,8 +15,8 @@ POST http://localhost:8081/v1/api/login
 Content-Type: application/json
 
 {
-    "email": "nhutphattranph@gmail.com",
-    "password": "phat123456789"
+    "email": "trannhutphattv@gmail.com",
+    "password": "phat12345"
 }
 
 ### REFRESH TOKEN
@@ -25,7 +25,7 @@ POST http://localhost:8081/v1/api/refreshToken
 POST http://localhost:8081/v1/api/logout
 ### list all users
 GET http://localhost:8081/v1/api/user/listAllUsers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzEwMDgwNjExLCJleHAiOjE3MTAwODA2NDF9.VXEUdTtwhOUQNy8C6oGjZbKjKcGoBqyKBBELaiaR62I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MTc5NzYwZmMxY2RhMDNmNmI1ZWVkMCIsImVtYWlsIjoidHJhbm5odXRwaGF0dHZAZ21haWwuY29tIiwiaWF0IjoxNzEyODIyNTg2LCJleHAiOjE3MTI4MjI2MTZ9.12oaJzBg0t_Q5uiO4fbg4t99D1bJOWaSmS3Bn8fO8FQ
 ### UPDATE PASSWORD
 PATCH http://localhost:8081/v1/api/user/updatePassword
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzEwMTQzNTY3LCJleHAiOjE3MTAxNjE1Njd9.FDHqp5rSjwBex2R3T3PXQd7YiaRFrDRgN1S5VvijcB4

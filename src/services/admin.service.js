@@ -11,7 +11,8 @@ class UserService {
             const ModifiedUsers = Users.map(obj => {
                 const {_id, createdAt, updatedAt, __v, roles,...rest} = obj
                 return {
-                    id: id++, 
+                    id: id++,
+                    idStore: _id,
                     email: rest.email,
                     name: rest.name,
                     age: rest.age,
