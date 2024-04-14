@@ -10,7 +10,7 @@ const AuthService = require('./auth.service')
 
 class AccessService {
     // [POST]/v1/api/signup
-    static signup = async({email, password, name, age, gender, phone}) => {
+    static signup = async({email, password, name, sexuality, phone}) => {
        try {
             const existUser = await userModel.findOne({ email }).lean()
             if (existUser) {
@@ -27,10 +27,9 @@ class AccessService {
                 email: email,
                 password: passwordHash,
                 name: name,
-                age: age,
-                gender: gender,
+                sexuality: sexuality,
                 phone: phone,
-                roles: [role.USER]
+                roles: role.USER
             })
 
             var transporter = nodemailer.createTransport({
@@ -56,7 +55,10 @@ class AccessService {
                 }
             });
 
-            return getData({ fields: ['_id', 'email', 'name', 'age', 'gender', 'phone'], object: newUser})
+            return {
+                success: true,
+                user: getData({ fields: ['_id', 'email', 'name', 'sexuality', 'phone'], object: newUser})
+            }
        } catch (error) {
             return {
                 error: true,

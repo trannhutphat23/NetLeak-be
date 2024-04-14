@@ -3,11 +3,10 @@ POST http://localhost:8081/v1/api/signup
 Content-Type: application/json
 
 {
-    "email": "trannhutphattv@gmail.com",
-    "password": "phat12345",
+    "email": "trannhutphattv123@gmail.com",
+    "password": "phat1234544",
     "name": "phat",
-    "age": 20,
-    "gender": "male",
+    "sexuality": "male",
     "phone": "123456789"
 }
 ### LOGIN

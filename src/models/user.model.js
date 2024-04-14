@@ -21,12 +21,7 @@ var userSchema = new Schema({
         required:true,
         trim: true,
     },
-    age:{
-        type: Number,
-        required:true,
-        trim: true,
-    },
-    gender: {
+    sexuality: {
         type: String,
         enum: ["male", "female"],
         default: ""
@@ -43,9 +38,8 @@ var userSchema = new Schema({
         },
     ],
     roles: {
-        type: [String],
-        enum: ["user", "admin"],
-        default: ["user"]
+        type: String,
+        default: "user"
     },
 }, {
     timestamps: true,
