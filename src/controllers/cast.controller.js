@@ -19,6 +19,24 @@ class CastController {
         }
     }
 
+    getCast = async (req, res, next) => {
+        try {
+            return res.status(201).json(await CastService.getCast(req.params));
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
+    deleteCast = async (req, res, next) => {
+        try {
+            return res.status(201).json(await CastService.deleteCast(req.query));
+        }
+        catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 module.exports = new CastController();

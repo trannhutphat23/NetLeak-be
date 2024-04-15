@@ -35,4 +35,10 @@ router.post('/casts', upload.single('avatar'), CastController.addCast)
 // list cast
 router.get('/casts', CastController.getCasts)
 
+// get cast by id
+router.get('/casts/:id', CastController.getCast)
+
+// delete cast
+router.delete('/casts', CastController.deleteCast)
+
 module.exports = router
