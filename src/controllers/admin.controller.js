@@ -10,6 +10,14 @@ class AdminController {
             next(error)
         }
     }
+
+    getUser = async (req, res, next) => {
+        try {
+            return res.status(201).json(await AdminService.getUser(req.params))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new AdminController();

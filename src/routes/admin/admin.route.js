@@ -1,6 +1,11 @@
 const express = require('express')
 const AdminController = require('../../controllers/admin.controller')
 const GenreController = require('../../controllers/genre.controller')
+const CastController = require('../../controllers/cast.controller')
+const uploadImage  = require('../../utils/uploadImage')
+const multer = require('multer')
+const cloudinary = require('../../configs/config.cloudinary')
+const upload = multer({ dest: 'uploads/' })
 const router = express.Router()
 
 // add new genre
@@ -19,6 +24,15 @@ router.put('/genres/:id', GenreController.updateGenre)
 router.delete('/genres/:id', GenreController.deleteGenre)
 
 // list all users
-router.get('/customers', AdminController.listAllUsers)
+router.get('/users', AdminController.listAllUsers)
+
+// get user by id
+router.get('/users/:id', AdminController.getUser)
+
+// add new cast
+router.post('/casts', upload.single('avatar'), CastController.addCast)
+
+// list cast
+router.get('/casts', CastController.getCasts)
 
 module.exports = router
