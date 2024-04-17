@@ -1,25 +1,16 @@
 const userModel = require('../models/user.model');
-const bcrypt = require('bcrypt')
-const getData = require('../utils/index');
+const getData = require('../utils/formatRes');
+const _ = require('lodash')
 
 class UserService {
-    // [GET]/v1/api/admin/listAllUsers
+    // [GET]/v1/api/admin/users
     static listAllUsers = async () => {
         try {
             const Users = await userModel.find({}).lean();
-            const ModifiedUsers = Users.map(obj => {
-                const {_id, createdAt, updatedAt, __v, roles,...rest} = obj
-                return {
-                    _id: _id,
-                    email: rest.email,
-                    name: rest.name,
-                    sexuality: rest.sexuality,
-                    phone: rest.phone,
-                    favorites: rest.favorites
-                };
-            })
 
-            return ModifiedUsers;
+            return _.map(Users, obj => getData({ 
+                            fields: ["_id", "email", "name", "sexuality", "phone", "favorites", "roles"], 
+                            object: obj }))
         } catch (error) {
             return {
                 success: false,
@@ -31,8 +22,10 @@ class UserService {
     static getUser = async (params = {id}) => {
         try {
             const ID = params.id;
-            
-            return userModel.findById(ID)
+            const user = await userModel.findById(ID);
+            return getData({
+                fields: ["_id", "email", "name", "sexuality", "phone", "favorites", "roles"], 
+                object: user });
         } catch (error) {
             return {
                 success: false,

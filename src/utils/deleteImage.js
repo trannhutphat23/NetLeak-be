@@ -13,21 +13,6 @@ const deleteImage = async (fileID) => {
             error,
         };
     }
-    
-    // cloudinary.uploader.destroy(fileID)
-    //                     .then((result) => {
-    //                         console.log(result);
-    //                         return{
-    //                             message: "Success",
-    //                             result,
-    //                         }
-    //                     })
-    //                     .catch((error) => {
-    //                         return {
-    //                             message: "Failure",
-    //                             error,
-    //                         }
-    //                     });
 }
 
 module.exports = deleteImage;

@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken')
-const getData = require('../utils/index');
+const getData = require('../utils/formatRes');
 const role = require('../configs/config.role');
 const AuthService = require('./auth.service')
 

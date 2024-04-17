@@ -1,4 +1,6 @@
 const studioModel = require("../models/studio.model");
+const getData = require('../utils/formatRes');
+const _ = require('lodash');
 
 class StudioService {
     static addStudio = async ({name}) => {
@@ -27,7 +29,9 @@ class StudioService {
         try {
             const studios = await studioModel.find({}).lean()
 
-            return studios
+            return _.map(studios, obj => getData({ 
+                fields: ["_id", "name", "movies"], 
+                object: obj }))
 
         } catch (error) {
             return {
@@ -46,7 +50,9 @@ class StudioService {
                     message: "Studio does not exist"
                 }
             }
-            return studio;
+            return getData({ 
+                fields: ["_id", "name", "movies"], 
+                object: studio });
         } catch (error) {
             return {
                 success: false,

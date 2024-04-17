@@ -1,6 +1,6 @@
 const userModel = require('../models/user.model');
 const bcrypt = require('bcrypt')
-const getData = require('../utils/index');
+const getData = require('../utils/formatRes');
 
 class UserService {
     // [GET]/v1/api/user/listAllUsers

@@ -1,7 +1,8 @@
 const castModel = require('../models/cast.model');
-const CastModel = require('../models/cast.model')
 const uploadImage = require('../utils/uploadImage')
 const deleteImage = require('../utils/deleteImage')
+const getData = require('../utils/formatRes')
+const _ = require('lodash');
 
 class CastService {
     static addCast = async (filePath, body) => {
@@ -26,7 +27,9 @@ class CastService {
         try {
             const Casts = await castModel.find({}).lean();
 
-            return Casts;
+            return _.map(Casts, obj => getData({ 
+                fields: ["_id", "avatar", "name", "description", "movies"], 
+                object: obj }));
         } catch (error) {
             return {
                 success: false,
@@ -39,7 +42,17 @@ class CastService {
         try {
             const ID = params.id;
             
-            return castModel.findById(ID)  
+            const cast = await castModel.findById(ID);
+            if (!cast) {
+                return {
+                    success: false,
+                    message: "Cast not exist"
+                }
+            }
+
+            return getData({ 
+                fields: ["_id", "avatar", "name", "description", "movies"], 
+                object: cast });
         } catch (error) {
             return {
                 success: false,

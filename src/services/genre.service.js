@@ -1,5 +1,6 @@
 const genreModel = require('../models/genre.model')
-const getData = require('../utils/index')
+const getData = require('../utils/formatRes')
+const _ = require('lodash');
 
 class GenreService {
     static addGenre = async ({title, description}) => {
@@ -29,16 +30,9 @@ class GenreService {
         try {
             const Genres = await genreModel.find({}).lean();
 
-            const ModifiedGenres = Genres.map(obj => {
-                const {createdAt, updatedAt, __v,...rest} = obj
-                return {
-                    id: rest._id,
-                    title: rest.title,
-                    description: rest.description,
-                    movies: rest.movies
-                };
-            })
-            return ModifiedGenres
+            return _.map(Genres, obj => getData({ 
+                fields: ["_id", "title", "description", "movies"], 
+                object: obj }))
         } catch (error) {
             return {
                 success: false,
@@ -51,7 +45,9 @@ class GenreService {
         try {
             const ID = params.id;
 
-            return genreModel.findById(ID)
+            const genre = await genreModel.findById(ID);
+
+            return getData({ fields: ['_id', 'title', 'description', 'movies'], object: genre}) 
         } catch (error) {
             return {
                 success: false,
@@ -71,7 +67,7 @@ class GenreService {
 
             const updatedGenre = await genreModel.findByIdAndUpdate(ID, data, {new: true});
             
-            return updatedGenre;
+            return getData({ fields: ['_id', 'title', 'description', 'movies'], object: updatedGenre});
         } catch (error) {
             return {
                 success: false,
