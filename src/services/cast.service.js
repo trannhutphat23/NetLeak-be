@@ -59,9 +59,15 @@ class CastService {
             const result = "NetLeak/Cast_Avatar/" + imgID
             await deleteImage(result)
 
-            await castModel.findByIdAndDelete(ID)
-            
+            const cast = await castModel.findByIdAndDelete(ID)
+            if (!cast){
+                return {
+                    success: false,
+                    message: "Cast not exist"
+                }
+            }
             return {
+                success: true,
                 message: "Delete successfully"
             }
         } catch (error) {

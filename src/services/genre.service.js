@@ -63,12 +63,14 @@ class GenreService {
     static updateGenre = async (params = {id},body = {title, description}) => {
         try {
             const ID = params.id;
+
             const data = {
                 title: body.title,
                 description: body.description
             }
-            const updatedGenre = await genreModel.findByIdAndUpdate(ID, data, {new: true});
 
+            const updatedGenre = await genreModel.findByIdAndUpdate(ID, data, {new: true});
+            
             return updatedGenre;
         } catch (error) {
             return {
@@ -82,9 +84,15 @@ class GenreService {
         try {
             const ID = params.id
 
-            await genreModel.findByIdAndDelete(ID)
-
+            const genre = await genreModel.findByIdAndDelete(ID)
+            if (!genre){
+                return {
+                    success: false,
+                    message: "Genre not exist"
+                }
+            }
             return {
+                success: true,
                 message: "Delete successfully"
             }
         } catch (error) {

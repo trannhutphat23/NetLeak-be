@@ -2,6 +2,7 @@ const express = require('express')
 const AdminController = require('../../controllers/admin.controller')
 const GenreController = require('../../controllers/genre.controller')
 const CastController = require('../../controllers/cast.controller')
+const StudioController = require('../../controllers/studio.controller')
 const uploadImage  = require('../../utils/uploadImage')
 const multer = require('multer')
 const cloudinary = require('../../configs/config.cloudinary')
@@ -40,5 +41,17 @@ router.get('/casts/:id', CastController.getCast)
 
 // delete cast
 router.delete('/casts', CastController.deleteCast)
+
+// add new studio
+router.post('/studios', StudioController.addStudio)
+
+// list studios
+router.get('/studios', StudioController.getStudios)
+
+// get studio by id
+router.get('/studios/:id', StudioController.getStudio)
+
+// delete studio by id
+router.delete('/studios/:id', StudioController.deleteStudio)
 
 module.exports = router
