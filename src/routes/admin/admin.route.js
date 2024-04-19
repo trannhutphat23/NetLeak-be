@@ -3,6 +3,7 @@ const AdminController = require('../../controllers/admin.controller')
 const GenreController = require('../../controllers/genre.controller')
 const CastController = require('../../controllers/cast.controller')
 const StudioController = require('../../controllers/studio.controller')
+const MovieController = require('../../controllers/movie.controller')
 const uploadImage  = require('../../utils/uploadImage')
 const multer = require('multer')
 const cloudinary = require('../../configs/config.cloudinary')
@@ -53,5 +54,11 @@ router.get('/studios/:id', StudioController.getStudio)
 
 // delete studio by id
 router.delete('/studios/:id', StudioController.deleteStudio)
+
+// add new movie
+router.post('/movies', upload.array('filmImg', 4), MovieController.addMovie)
+
+// list movie
+router.get('/movies', MovieController.getMovies)
 
 module.exports = router

@@ -1,0 +1,21 @@
+const MovieService = require('../services/movie.service')
+
+class MovieController {
+    addMovie = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.addMovie(req.files, req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    getMovies = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getMovies())
+        } catch (error){
+            next(error)
+        }
+    }
+}
+
+module.exports = new MovieController();

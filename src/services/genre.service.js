@@ -21,14 +21,17 @@ class GenreService {
         } catch (error) {
             return {
                 success: false,
-                message: "Error"
+                message: error.message
             }
         }
     }
 
     static listGenres = async () => {
         try {
-            const Genres = await genreModel.find({}).lean();
+            const Genres = await genreModel.find({}).populate({
+                path: "movies",
+                select: '_id plot title fullplot released lastupdated type'
+            }).lean();
 
             return _.map(Genres, obj => getData({ 
                 fields: ["_id", "title", "description", "movies"], 

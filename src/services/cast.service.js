@@ -9,7 +9,7 @@ class CastService {
         try {
             const cloudinaryFolder = 'NetLeak/Cast_avatar';
             const avatarUrl = await uploadImage(filePath, cloudinaryFolder);
-            const newCast = new CastModel({
+            const newCast = new castModel({
                 avatar: avatarUrl,
                 name: body.name,
                 description: body.description
@@ -25,7 +25,10 @@ class CastService {
 
     static getCasts = async () => {
         try {
-            const Casts = await castModel.find({}).lean();
+            const Casts = await castModel.find({}).populate({
+                path: "movies",
+                select: '_id plot title fullplot released lastupdated type'
+            }).lean();
 
             return _.map(Casts, obj => getData({ 
                 fields: ["_id", "avatar", "name", "description", "movies"], 

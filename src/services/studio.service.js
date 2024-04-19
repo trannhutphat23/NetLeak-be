@@ -27,7 +27,10 @@ class StudioService {
 
     static getStudios = async () => {
         try {
-            const studios = await studioModel.find({}).lean()
+            const studios = await studioModel.find({}).populate({
+                path: "movies",
+                select: '_id plot title fullplot released lastupdated type'
+            }).lean()
 
             return _.map(studios, obj => getData({ 
                 fields: ["_id", "name", "movies"], 
