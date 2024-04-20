@@ -6,7 +6,7 @@ const COLLECTION_NAME = 'Videos'
 var videoScheme = new Schema({
     film_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Film',
+        ref: 'Movie',
         required: true,
     },
     type: {

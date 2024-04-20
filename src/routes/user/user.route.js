@@ -8,4 +8,11 @@ router.get('/listAllUsers', AuthService.verifyToken, UserController.listAllUsers
 // update password
 router.patch('/updatePassword', AuthService.verifyToken, UserController.updatePassword)
 
+// list film
+// router.get('/movies', AuthService.verifyToken, UserController.getMovies)
+router.get('/movies', UserController.getMovies)
+
+// get film by id
+router.get('/movies/:id', AuthService.verifyToken, UserController.getMovie)
+
 module.exports = router

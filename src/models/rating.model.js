@@ -11,7 +11,7 @@ var ratingScheme = new Schema({
     },
     film_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Film',
+        ref: 'Movie',
         required: true,
     },
     rate: {
