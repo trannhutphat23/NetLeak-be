@@ -244,7 +244,21 @@ class MovieService {
                                                                 {rate: rate}, 
                                                                 {new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true});
                 
-                await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: rate}})                                                           
+                const result = await ratingModel.aggregate([
+                    {
+                        $match: {
+                            film_id: film._id
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: "$film_id",
+                            averageRate: { $avg: "$rate" }
+                        }
+                    }
+                ]);
+                const avgRate = result[0].averageRate;
+                await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate}})                                                           
 
                 return (await rating.populate({
                     path: "email",
