@@ -4,6 +4,7 @@ const directorModel = require('../models/studio.model')
 const castModel = require('../models/cast.model');
 const uploadImage = require('../utils/uploadImage')
 const deleteImage = require('../utils/deleteImage')
+const getName = require('../utils/getNameImage')
 const getData = require('../utils/formatRes')
 const _ = require('lodash');
 const CastService = require('./cast.service');
@@ -18,9 +19,10 @@ class MovieService {
                     message: "Movie already exists"
                 }
             }
-            
+
             const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
             const filmImgArr = [];
+            console.log(files)
             files.forEach((file) => {
                 var originalName = "";
                 if (file.originalname.includes("poster")){
@@ -50,8 +52,6 @@ class MovieService {
                     }
                 }
             }
-
-            
 
             const newMovie = new movieModel({
                 plot: body.plot,
@@ -113,6 +113,103 @@ class MovieService {
                 .populate("directors")
 
             return Movies;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
+    static getMovie = async (params) => {
+        try {
+            const film = await movieModel.findById(params.id)
+                                        .populate('genres')
+                                        .populate('cast')
+                                        .populate('directors')
+
+            return film;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
+    static updateMovie = async (params = {id},body = {plot, title, fullplot, type}) => {
+        try {
+            const ID = params.id;
+
+            const data = {
+                plot: body.plot,
+                title: body.title,
+                fullplot: body.fullplot,
+                type: body.type
+            }
+
+            const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, {new: true});
+
+            return updatedFilm;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
+    static deleteMovie = async (query) => {
+        try {
+            const id = query.id
+
+            const movie = await movieModel.findByIdAndDelete(id)
+            if (!movie){
+                return {
+                    success: false,
+                    message: "Movie does not exist"
+                }
+            }
+            const imgObj = movie.image
+            for (const key in imgObj) {
+                if (imgObj.hasOwnProperty(key)){
+                    const url = imgObj[key]
+                    if (Array.isArray(url)) {
+                        url.map(async (u) => {
+                            const name = getName(u)
+                            const result = "NetLeak/Film_Image/" + name
+                            await deleteImage(result)
+                        })
+                    }else{
+                        const name = getName(url)
+                        const result = "NetLeak/Film_Image/" + name
+                        await deleteImage(result)
+                    }
+                }
+            }
+            
+            const genreIdArr = movie.genres
+            for (const genreId in genreIdArr){
+                const genre = await genreModel.findById(genreIdArr[genreId])
+                await genre.updateOne({ $pull: { movies: movie._id }})
+            }
+
+            const castIdArr = movie.cast
+            for (const castId in castIdArr){
+                const cast = await castModel.findById(castIdArr[castId])
+                await cast.updateOne({ $pull: { movies: movie._id }})
+            }
+
+            const directorIdArr = movie.directors
+            for (const directorId in directorIdArr){
+                const director = await directorModel.findById(directorIdArr[directorId])
+                await director.updateOne({ $pull: { movies: movie._id }})
+            }
+
+            return {
+                success: true,
+                message: "Delete successfully"
+            }
         } catch (error) {
             return {
                 success: false,

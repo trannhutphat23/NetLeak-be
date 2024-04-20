@@ -16,6 +16,30 @@ class MovieController {
             next(error)
         }
     }
+
+    getMovie = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getMovie(req.params))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    updateMovie = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.updateMovie(req.params, req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    deleteMovie = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.deleteMovie(req.query))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new MovieController();

@@ -15,7 +15,7 @@ Content-Type: application/json
 
 {
     "email": "trannhutphattv@gmail.com",
-    "password": "phat12345"
+    "password": "phat123456"
 }
 
 ### REFRESH TOKEN
@@ -23,8 +23,12 @@ POST http://localhost:8081/v1/api/refreshToken
 ### LOGOUT
 POST http://localhost:8081/v1/api/logout
 ### list all users
+GET http://localhost:8081/v1/api/admin/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjM3MTJiZGJjODRjNzZmYjkwMWI4OSIsImVtYWlsIjoidHJhbm5odXRwaGF0dHZAZ21haWwuY29tIiwiaWF0IjoxNzEzNTk5MzIzLCJleHAiOjE3MTM2MTczMjN9.-_ih2luyfywbwc_BD4xGyXvc_haLzWSeo2atUM1cJwI
+
+### list all users
 GET http://localhost:8081/v1/api/user/listAllUsers
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MTc5NzYwZmMxY2RhMDNmNmI1ZWVkMCIsImVtYWlsIjoidHJhbm5odXRwaGF0dHZAZ21haWwuY29tIiwiaWF0IjoxNzEyODIyNTg2LCJleHAiOjE3MTI4MjI2MTZ9.12oaJzBg0t_Q5uiO4fbg4t99D1bJOWaSmS3Bn8fO8FQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MjM3MTJiZGJjODRjNzZmYjkwMWI4OSIsImVtYWlsIjoidHJhbm5odXRwaGF0dHZAZ21haWwuY29tIiwiaWF0IjoxNzEzNTk5MjIyLCJleHAiOjE3MTM2MTcyMjJ9.X-uiSEIW8B4QeihH75X5mEw7hm4e691Qt6RfUn8hVHo
 ### UPDATE PASSWORD
 PATCH http://localhost:8081/v1/api/user/updatePassword
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZWMzYWM2ODU0NGE3ZjFlNGM3NjE2MCIsImVtYWlsIjoibmh1dHBoYXR0cmFucGhAZ21haWwuY29tIiwiaWF0IjoxNzEwMTQzNTY3LCJleHAiOjE3MTAxNjE1Njd9.FDHqp5rSjwBex2R3T3PXQd7YiaRFrDRgN1S5VvijcB4

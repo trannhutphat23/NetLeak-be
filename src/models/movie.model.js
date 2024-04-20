@@ -50,10 +50,6 @@ var movieSchema = new Schema({
             ref: 'Studio'
         }
     ],
-    lastupdated: {
-        type: Date,
-        default: Date.now()
-    },
     imdb: {
         rating: {
             type: Number

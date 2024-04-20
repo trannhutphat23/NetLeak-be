@@ -2,6 +2,7 @@ const castModel = require('../models/cast.model');
 const uploadImage = require('../utils/uploadImage')
 const deleteImage = require('../utils/deleteImage')
 const getData = require('../utils/formatRes')
+const getName = require('../utils/getNameImage')
 const _ = require('lodash');
 
 class CastService {
@@ -69,10 +70,8 @@ class CastService {
             const ID = query.id;
             const imgUrl = query.imageUrl
             
-            const linkArr = imgUrl.split('/')
-            const imgName = linkArr[linkArr.length - 1]
-            const imgID = imgName.split('.')[0]
-            const result = "NetLeak/Cast_Avatar/" + imgID
+            const name = getName(imgUrl)
+            const result = "NetLeak/Cast_Avatar/" + name
             await deleteImage(result)
 
             const cast = await castModel.findByIdAndDelete(ID)
