@@ -217,6 +217,19 @@ class MovieService {
             }
         }
     }
+
+    static getFilmsByGenres = async (body) => {
+        try {
+            const genres = await genreModel.find({_id: {$in: body.genres}}).populate("movies")
+
+            return {movies: genres[0].movies};
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
 }
 
 module.exports = MovieService;

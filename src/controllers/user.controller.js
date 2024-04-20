@@ -1,4 +1,5 @@
 const UserService = require('../services/user.service')
+const MovieService = require('../services/movie.service')
 
 class UserController {
     // list all users
@@ -13,6 +14,16 @@ class UserController {
     updatePassword = async (req, res, next) => {
         try {
             return res.status(201).json(await UserService.updatePassword(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    // get film by genres
+    getFilmsByGenres = async (req, res, next) => {
+        try {
+
+            return res.status(201).json(await MovieService.getFilmsByGenres(req.body))
         } catch (error){
             next(error)
         }

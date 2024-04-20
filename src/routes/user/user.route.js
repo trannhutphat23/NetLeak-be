@@ -7,5 +7,7 @@ const router = express.Router()
 router.get('/listAllUsers', AuthService.verifyToken, UserController.listAllUsers)
 // update password
 router.patch('/updatePassword', AuthService.verifyToken, UserController.updatePassword)
+// filter film by genre
+router.get('/films', AuthService.verifyToken, UserController.getFilmsByGenres)
 
 module.exports = router
