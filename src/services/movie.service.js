@@ -262,6 +262,7 @@ class MovieService {
                         }
                     }
                 ]);
+                
                 const avgRate = result[0].averageRate;
                 await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate}})                                                           
 
