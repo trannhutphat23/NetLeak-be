@@ -228,7 +228,6 @@ class MovieService {
             movies = movies.filter(movie => {
                 return movie.type === body.type
             })
-
             return {movies: movies};
         } catch (error) {
             return {
@@ -248,7 +247,6 @@ class MovieService {
                 const rating = await ratingModel.findOneAndUpdate({email: user._id, film_id: film._id}, 
                                                                 {rate: rate}, 
                                                                 {new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true});
-                
                 const result = await ratingModel.aggregate([
                     {
                         $match: {
@@ -264,7 +262,9 @@ class MovieService {
                 ]);
                 
                 const avgRate = result[0].averageRate;
+
                 await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate}})                                                           
+
 
                 return (await rating.populate({
                     path: "email",
