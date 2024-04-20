@@ -19,19 +19,20 @@ class UserController {
         }
     }
 
-    //get film
+    //get films
     getMovies = async (req, res, next) => {
         try {
             if (req.query.type)
                 return res.status(201).json(await MovieService.getMovieByType(req.query.type))
-            else
-                return res.status(201).json(await MovieService.getMovies())
+
+            return res.status(201).json(await MovieService.getMovies())
 
         } catch (error) {
             next(error)
         }
     }
 
+    //get film by id
     getMovie = async (req, res, next) => {
         try {
             return res.status(201).json(await CastService.getMovie(req.params));

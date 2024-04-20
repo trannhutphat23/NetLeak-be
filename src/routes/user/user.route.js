@@ -9,8 +9,7 @@ router.get('/listAllUsers', AuthService.verifyToken, UserController.listAllUsers
 router.patch('/updatePassword', AuthService.verifyToken, UserController.updatePassword)
 
 // list film
-// router.get('/movies', AuthService.verifyToken, UserController.getMovies)
-router.get('/movies', UserController.getMovies)
+router.get('/movies', AuthService.verifyToken, UserController.getMovies)
 
 // get film by id
 router.get('/movies/:id', AuthService.verifyToken, UserController.getMovie)
