@@ -2,6 +2,8 @@ const movieModel = require('../models/movie.model')
 const genreModel = require('../models/genre.model')
 const directorModel = require('../models/studio.model')
 const castModel = require('../models/cast.model');
+const ratingModel = require('../models/rating.model')
+const userModel = require('../models/user.model')
 const uploadImage = require('../utils/uploadImage')
 const deleteImage = require('../utils/deleteImage')
 const getName = require('../utils/getNameImage')
@@ -223,6 +225,51 @@ class MovieService {
             const genres = await genreModel.find({_id: {$in: body.genres}}).populate("movies")
 
             return {movies: genres[0].movies};
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
+    static ratingFilm = async (query) => {
+        try {
+            const {id, filmId, rate} = query
+            const user = await userModel.findById(id)
+            const film = await movieModel.findById(filmId)
+            const existRating = await ratingModel.find({email: user._id, film_id: film._id})
+            if (existRating){
+                const rating = await ratingModel.findOneAndUpdate({email: user._id, film_id: film._id}, 
+                                                                {rate: rate}, 
+                                                                {new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true});
+                
+                await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: rate}})                                                           
+
+                return (await rating.populate({
+                    path: "email",
+                    select: '_id email name sexuality phone favorites roles'
+                })).populate({
+                    path: "film_id",
+                    select: '_id image imdb plot title fullplot released lastupdated type'
+                })
+            }else {
+                const newRating = new ratingModel({
+                    email: user._id,
+                    film_id: film._id,
+                    rate: rate
+                })
+                const createdrating = await newRating.save();
+
+                return (await createdrating.populate({
+                    path: "email",
+                    select: '_id email name sexuality phone favorites roles'
+                })).populate({
+                    path: "film_id",
+                    select: '_id image imdb plot title fullplot released lastupdated type'
+                })
+            }
+
         } catch (error) {
             return {
                 success: false,

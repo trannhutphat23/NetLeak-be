@@ -9,5 +9,7 @@ router.get('/listAllUsers', AuthService.verifyToken, UserController.listAllUsers
 router.patch('/updatePassword', AuthService.verifyToken, UserController.updatePassword)
 // filter film by genre
 router.get('/films', AuthService.verifyToken, UserController.getFilmsByGenres)
+// rating film
+router.post('/rating', AuthService.verifyToken, UserController.ratingFilm)
 
 module.exports = router
