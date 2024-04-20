@@ -223,8 +223,13 @@ class MovieService {
     static getFilmsByGenres = async (body) => {
         try {
             const genres = await genreModel.find({_id: {$in: body.genres}}).populate("movies")
+            
+            let movies = genres[0].movies
+            movies = movies.filter(movie => {
+                return movie.type === body.type
+            })
 
-            return {movies: genres[0].movies};
+            return {movies: movies};
         } catch (error) {
             return {
                 success: false,
