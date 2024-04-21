@@ -1,9 +1,11 @@
+const mongoose = require('mongoose')
 const movieModel = require('../models/movie.model')
 const genreModel = require('../models/genre.model')
 const directorModel = require('../models/studio.model')
 const castModel = require('../models/cast.model');
 const ratingModel = require('../models/rating.model')
 const userModel = require('../models/user.model')
+const savedMovieModel = require('../models/saved_movie.model')
 const uploadImage = require('../utils/uploadImage')
 const deleteImage = require('../utils/deleteImage')
 const getName = require('../utils/getNameImage')
@@ -228,7 +230,6 @@ class MovieService {
             movies = movies.filter(movie => {
                 return movie.type === body.type
             })
-
             return {movies: movies};
         } catch (error) {
             return {
@@ -248,7 +249,6 @@ class MovieService {
                 const rating = await ratingModel.findOneAndUpdate({email: user._id, film_id: film._id}, 
                                                                 {rate: rate}, 
                                                                 {new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true});
-                
                 const result = await ratingModel.aggregate([
                     {
                         $match: {
@@ -265,7 +265,7 @@ class MovieService {
                 
                 const avgRate = result[0].averageRate;
 
-                await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate}})                                                           
+                await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate, vote: film.imdb.vote}})                                                           
 
                 return (await rating.populate({
                     path: "email",
@@ -296,6 +296,74 @@ class MovieService {
                 success: false,
                 message: error.message
             }
+        }
+    }
+
+    static deleteRatingFilm = async({userId, filmId}) => {
+        try {
+            const film = await movieModel.findById(filmId)
+
+            const existRating = await ratingModel.findOne({email: userId, film_id: filmId})
+            if (!existRating){
+                return {
+                    success: false,
+                    message: "Rating does not exist"
+                }
+            }
+
+            await ratingModel.findByIdAndDelete(existRating._id)
+            
+            const result = await ratingModel.aggregate([
+                {
+                    $match: {
+                        film_id: film._id
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$film_id",
+                        averageRate: { $avg: "$rate" }
+                    }
+                }
+            ]);
+            
+            const avgRate = (!result[0]) ? null : result[0].averageRate
+
+            await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate, vote: film.imdb.vote}})
+
+            return {
+                success: true,
+                message: "Delete successfully"
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
+    static getSavedFilm = async (params) => {
+        try {
+            const ID = params.id
+
+            const user = await userModel.findById(ID)
+            if (!user) {
+                return {
+                    sucess: false,
+                    message: "User does not exist"
+                }
+            }
+            const savedFilm = await savedMovieModel.findOne({userId: user._id})
+
+            const formatSavedFilm = savedFilm.populate("filmId")
+
+            return formatSavedFilm;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            } 
         }
     }
 }
