@@ -7,6 +7,8 @@ const router = express.Router()
 router.get('/listAllUsers', AuthService.verifyToken, UserController.listAllUsers)
 // update password
 router.patch('/updatePassword', AuthService.verifyToken, UserController.updatePassword)
+// update account user by id
+router.patch('/update/account/:id', AuthService.verifyToken, UserController.updateAccount)
 // filter film by genre
 router.get('/films', AuthService.verifyToken, UserController.getFilmsByGenres)
 // rating film

@@ -70,7 +70,11 @@ class GenreService {
 
             const updatedGenre = await genreModel.findByIdAndUpdate(ID, data, {new: true});
             
-            return getData({ fields: ['_id', 'title', 'description', 'movies'], object: updatedGenre});
+            return {
+                success: true,
+                message: "Update successfully",
+                user: getData({ fields: ['_id', 'title', 'description', 'movies'], object: updatedGenre})
+            }
         } catch (error) {
             return {
                 success: false,
