@@ -49,7 +49,7 @@ class UserController {
     // update account
     updateAccount = async (req, res, next) => {
         try {
-            return res.status(201).json(await MovieService.updateAccount(req.params, req.body))
+            return res.status(201).json(await UserService.updateAccount(req.params, req.body))
         } catch (error){
             next(error)
         }

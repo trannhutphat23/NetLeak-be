@@ -41,7 +41,43 @@ class UserService {
         } catch (error) {
             console.log(error)
         }
-    }   
+    }  
+    
+    static updateAccount = async ({id}, {name, sexuality, phone}) => {
+        try {
+            if (id.length > 24){
+                return {
+                    success: false,
+                    message: "User does not exist"
+                }
+            }
+            const existUser = await userModel.findById(id).lean()
+            if (!existUser){
+                return {
+                    success: false,
+                    message: "User does not exist"
+                }
+            }
+            const data = {
+                name: name,
+                sexuality: sexuality,
+                phone: phone
+            }
+
+            const updatedUser = await userModel.findByIdAndUpdate(existUser._id, data, {new: true})
+
+            return {
+                success: true,
+                message: "Update successfully",
+                user: getData({fields: ['_id', 'email', 'name', 'sexuality', 'phone', 'favorites', 'roles'] , object: updatedUser})
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
 }
 
 module.exports = UserService;
