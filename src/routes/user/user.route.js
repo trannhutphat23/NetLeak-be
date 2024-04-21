@@ -19,5 +19,11 @@ router.delete('/rating', AuthService.verifyToken, UserController.deleteRatingFil
 router.post('/save', AuthService.verifyToken, UserController.saveFilm)
 // get film in savedFilm by user_id
 router.get('/savedFilm/:id', AuthService.verifyToken, UserController.getSavedFilm)
+// get favorite film
+router.get('/favorite', AuthService.verifyToken, UserController.getFavoriteFilm)
+// add favorite film
+router.post('/favorite', AuthService.verifyToken, UserController.addFavoriteFilm)
+// delete favorite film
+router.delete('/favorite', AuthService.verifyToken, UserController.deleteFavoriteFilm)
 
 module.exports = router
