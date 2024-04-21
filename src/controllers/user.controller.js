@@ -63,6 +63,16 @@ class UserController {
             next(error)
         }
     }
+
+    // get saved film by id
+    getSavedFilm = async (req, res, next) => {
+        try {
+            console.log(req.params)
+            return res.status(201).json(await MovieService.getSavedFilm(req.params))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();

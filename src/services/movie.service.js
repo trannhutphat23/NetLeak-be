@@ -5,6 +5,7 @@ const directorModel = require('../models/studio.model')
 const castModel = require('../models/cast.model');
 const ratingModel = require('../models/rating.model')
 const userModel = require('../models/user.model')
+const savedMovieModel = require('../models/saved_movie.model')
 const uploadImage = require('../utils/uploadImage')
 const deleteImage = require('../utils/deleteImage')
 const getName = require('../utils/getNameImage')
@@ -342,6 +343,29 @@ class MovieService {
         }
     }
 
+    static getSavedFilm = async (params) => {
+        try {
+            const ID = params.id
+
+            const user = await userModel.findById(ID)
+            if (!user) {
+                return {
+                    sucess: false,
+                    message: "User does not exist"
+                }
+            }
+            const savedFilm = await savedMovieModel.findOne({userId: user._id})
+
+            const formatSavedFilm = savedFilm.populate("filmId")
+
+            return formatSavedFilm;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            } 
+        }
+    }
 }
 
 module.exports = MovieService;
