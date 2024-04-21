@@ -263,8 +263,7 @@ class MovieService {
                 
                 const avgRate = result[0].averageRate;
 
-                await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate}})                                                           
-
+                await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate, vote: film.imdb.vote}})                                                           
 
                 return (await rating.populate({
                     path: "email",
@@ -290,6 +289,50 @@ class MovieService {
                 })
             }
 
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
+    static deleteRatingFilm = async({userId, filmId}) => {
+        try {
+            const film = await movieModel.findById(filmId)
+
+            const existRating = await ratingModel.findOne({email: userId, film_id: filmId})
+            if (!existRating){
+                return {
+                    success: false,
+                    message: "Rating does not exist"
+                }
+            }
+
+            await ratingModel.findByIdAndDelete(existRating._id)
+            
+            const result = await ratingModel.aggregate([
+                {
+                    $match: {
+                        film_id: film._id
+                    }
+                },
+                {
+                    $group: {
+                        _id: "$film_id",
+                        averageRate: { $avg: "$rate" }
+                    }
+                }
+            ]);
+            
+            const avgRate = (!result[0]) ? null : result[0].averageRate
+
+            await movieModel.findOneAndUpdate({_id: film._id}, {imdb: {rating: avgRate, vote: film.imdb.vote}})
+
+            return {
+                success: true,
+                message: "Delete successfully"
+            }
         } catch (error) {
             return {
                 success: false,

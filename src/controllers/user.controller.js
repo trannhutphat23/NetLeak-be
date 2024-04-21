@@ -36,6 +36,15 @@ class UserController {
             next(error)
         }
     }
+
+    // delete rating film
+    deleteRatingFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.deleteRatingFilm(req.query))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();

@@ -11,5 +11,7 @@ router.patch('/updatePassword', AuthService.verifyToken, UserController.updatePa
 router.get('/films', AuthService.verifyToken, UserController.getFilmsByGenres)
 // rating film
 router.post('/rating', AuthService.verifyToken, UserController.ratingFilm)
+// delete rating film
+router.delete('/rating', AuthService.verifyToken, UserController.deleteRatingFilm)
 
 module.exports = router
