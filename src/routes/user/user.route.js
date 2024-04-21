@@ -15,5 +15,7 @@ router.get('/films', AuthService.verifyToken, UserController.getFilmsByGenres)
 router.post('/rating', AuthService.verifyToken, UserController.ratingFilm)
 // delete rating film
 router.delete('/rating', AuthService.verifyToken, UserController.deleteRatingFilm)
+// save film
+router.post('/save', AuthService.verifyToken, UserController.saveFilm)
 
 module.exports = router

@@ -54,6 +54,15 @@ class UserController {
             next(error)
         }
     }
+
+    // save film
+    saveFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.saveFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();
