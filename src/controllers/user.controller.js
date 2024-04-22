@@ -110,6 +110,24 @@ class UserController {
         }
     }
 
+    getRecommend = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getRecommend(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    payment = async (req, res, next) => {
+        try {
+            return (req.body.type === "momo") ? 
+                res.status(201).json(await UserService.paymentByMoMo(req.body))
+                :
+                res.status(201).json(await UserService.paymentByPaypal(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();

@@ -27,5 +27,9 @@ router.get('/favorite', AuthService.verifyToken, UserController.getFavoriteFilm)
 router.post('/favorite', AuthService.verifyToken, UserController.addFavoriteFilm)
 // delete favorite film
 router.delete('/favorite', AuthService.verifyToken, UserController.deleteFavoriteFilm)
+// get recommend list film from save list film
+router.get('/recommend', AuthService.verifyToken, UserController.getRecommend)
+// payment
+router.post('/payment', AuthService.verifyToken, UserController.payment)
 
 module.exports = router

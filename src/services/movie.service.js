@@ -372,6 +372,17 @@ class MovieService {
             } 
         }
     }
+
+    static getRecommend = async ({userId}) => {
+        try {
+            return userId;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
 }
 
 module.exports = MovieService;
