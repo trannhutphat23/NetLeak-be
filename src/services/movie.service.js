@@ -356,7 +356,13 @@ class MovieService {
             }
             const savedFilm = await savedMovieModel.findOne({userId: user._id})
 
-            const formatSavedFilm = savedFilm.populate("filmId")
+            if (!savedFilm){
+                return {
+                    success: false,
+                    message: "No films have been saved"
+                }
+            }
+            const formatSavedFilm = await savedFilm.populate("filmId")
 
             return formatSavedFilm;
         } catch (error) {
