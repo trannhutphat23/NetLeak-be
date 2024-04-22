@@ -64,6 +64,15 @@ class UserController {
         }
     }
 
+    // unsave film
+    unsaveFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.unsaveFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
     // get saved film by id
     getSavedFilm = async (req, res, next) => {
         try {
@@ -73,7 +82,6 @@ class UserController {
             next(error)
         }
     }
-
 
     // get favorite film
     getFavoriteFilm = async (req, res, next) => {

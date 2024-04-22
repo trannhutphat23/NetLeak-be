@@ -134,6 +134,39 @@ class UserService {
         }
     }
 
+    static unsaveFilm = async ({userId, filmId}) => {
+        try {
+            const user = await userModel.findById(userId)
+            if (!user){
+                return {
+                    success: false,
+                    message: "User does not exist"
+                }
+            }
+
+            const film = await movieModel.findById(filmId)
+            const existSavedFilm = await savedMovieModel.findOne({ userId: user._id, filmId: film._id })
+            if(existSavedFilm){
+                const unSavedFilm = await savedMovieModel.findOneAndUpdate({ userId: user._id, filmId: { $in: [film._id] } }, {
+                    $pull: { filmId: film._id }
+                });
+                return {
+                    success: true,
+                    message: "Delete successfully",
+                }
+            }
+            return {
+                success: false,
+                message: "Film not saved"
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
     static addFavoriteFilm = async ({ film_id, user_id }) => {
         try {
             const movie = await movieModel.findById(film_id)

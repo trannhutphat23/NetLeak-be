@@ -364,7 +364,7 @@ class MovieService {
             }
             const formatSavedFilm = await savedFilm.populate("filmId")
 
-            return formatSavedFilm;
+            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatSavedFilm});
         } catch (error) {
             return {
                 success: false,
