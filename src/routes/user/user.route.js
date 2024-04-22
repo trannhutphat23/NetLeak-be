@@ -28,5 +28,4 @@ router.post('/favorite', AuthService.verifyToken, UserController.addFavoriteFilm
 // delete favorite film
 router.delete('/favorite', AuthService.verifyToken, UserController.deleteFavoriteFilm)
 
-
 module.exports = router
