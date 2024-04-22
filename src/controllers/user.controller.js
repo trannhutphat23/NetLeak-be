@@ -73,6 +73,35 @@ class UserController {
             next(error)
         }
     }
+
+
+    // get favorite film
+    getFavoriteFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.getFavoriteFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    // add favorite film
+    addFavoriteFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.addFavoriteFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    // delete favorite film
+    deleteFavoriteFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.deleteFavoriteFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
 }
 
 module.exports = new UserController();
