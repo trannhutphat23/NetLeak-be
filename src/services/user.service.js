@@ -44,18 +44,28 @@ class UserService {
         } catch (error) {
             console.log(error)
         }
+
     }
 
     static updateAccount = async ({ id }, { name, sexuality, phone }) => {
         try {
             if (id.length > 24) {
+
+    }  
+    
+    static updateAccount = async ({id}, {name, sexuality, phone}) => {
+        try {
+            if (id.length > 24){
                 return {
                     success: false,
                     message: "User does not exist"
                 }
             }
             const existUser = await userModel.findById(id).lean()
-            if (!existUser) {
+
+
+            if (!existUser){
+
                 return {
                     success: false,
                     message: "User does not exist"
@@ -67,7 +77,9 @@ class UserService {
                 phone: phone
             }
 
+
             const updatedUser = await userModel.findByIdAndUpdate(existUser._id, data, { new: true })
+
 
             return {
                 success: true,
@@ -81,8 +93,8 @@ class UserService {
             }
         }
     }
-
-    static saveFilm = async ({ userId, filmId }) => {
+    
+    static saveFilm = async ({userId, filmId}) => {
         try {
             const user = await userModel.findById(userId)
             const film = await movieModel.findById(filmId)
@@ -117,10 +129,10 @@ class UserService {
                     path: "filmId",
                     select: '_id plot title fullplot released lastupdated type'
                 })).
-                    populate({
-                        path: "userId",
-                        select: '_id email name sexuality phone favorites roles'
-                    })
+                populate({
+                    path: "userId",
+                    select: '_id email name sexuality phone favorites roles'
+                })
 
                 return getData({ fields: ['_id', 'userId', 'filmId'], object: formatSavedFilm })
             }

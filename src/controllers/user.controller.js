@@ -74,6 +74,7 @@ class UserController {
         }
     }
 
+
     // get favorite film
     getFavoriteFilm = async (req, res, next) => {
         try {
@@ -100,6 +101,7 @@ class UserController {
             next(error)
         }
     }
+
 }
 
 module.exports = new UserController();
