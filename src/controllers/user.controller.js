@@ -63,6 +63,7 @@ class UserController {
             next(error)
         }
     }
+    
 
     // unsave film
     unsaveFilm = async (req, res, next) => {
@@ -109,10 +110,34 @@ class UserController {
             next(error)
         }
     }
-
+    // chua xong
     getRecommend = async (req, res, next) => {
         try {
             return res.status(201).json(await MovieService.getRecommend(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    addHistory = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.addHistory(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    getHistoryFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getHistoryFilm(req.params))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    deleteHistoryFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.deleteHistoryFilm(req.body))
         } catch (error){
             next(error)
         }
@@ -123,7 +148,7 @@ class UserController {
             return (req.body.type === "momo") ? 
                 res.status(201).json(await UserService.paymentByMoMo(req.body))
                 :
-                res.status(201).json(await UserService.paymentByPaypal(req.body))
+                res.status(201).json(await UserService.paymentByVNPay(req.body))
         } catch (error){
             next(error)
         }

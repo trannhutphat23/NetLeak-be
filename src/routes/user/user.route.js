@@ -29,6 +29,12 @@ router.post('/favorite', AuthService.verifyToken, UserController.addFavoriteFilm
 router.delete('/favorite', AuthService.verifyToken, UserController.deleteFavoriteFilm)
 // get recommend list film from save list film
 router.get('/recommend', AuthService.verifyToken, UserController.getRecommend)
+// add to history view
+router.post('/history', AuthService.verifyToken, UserController.addHistory)
+// get film in history by user_id
+router.get('/historyFilm/:id', AuthService.verifyToken, UserController.getHistoryFilm)
+// delete film from history
+router.delete('/historyFilm', AuthService.verifyToken, UserController.deleteHistoryFilm)
 // payment
 router.post('/payment', AuthService.verifyToken, UserController.payment)
 

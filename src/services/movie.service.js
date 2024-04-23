@@ -6,6 +6,7 @@ const castModel = require('../models/cast.model');
 const ratingModel = require('../models/rating.model')
 const userModel = require('../models/user.model')
 const savedMovieModel = require('../models/saved_movie.model')
+const historyModel = require('../models/history.model')
 const uploadImage = require('../utils/uploadImage')
 const deleteImage = require('../utils/deleteImage')
 const getName = require('../utils/getNameImage')
@@ -365,6 +366,36 @@ class MovieService {
             const formatSavedFilm = await savedFilm.populate("filmId")
 
             return getData({ fields: ['_id', 'userId', 'filmId'], object: formatSavedFilm});
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            } 
+        }
+    }
+
+    static getHistoryFilm = async (params) => {
+        try {
+            const ID = params.id
+
+            const user = await userModel.findById(ID)
+            if (!user) {
+                return {
+                    sucess: false,
+                    message: "User does not exist"
+                }
+            }
+            const historyFilm = await historyModel.findOne({userId: user._id})
+
+            if (!historyFilm){
+                return {
+                    success: false,
+                    message: "No films have been saved"
+                }
+            }
+            const formatHistoryFilm = await historyFilm.populate("filmId")
+
+            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatHistoryFilm});
         } catch (error) {
             return {
                 success: false,
