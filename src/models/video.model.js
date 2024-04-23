@@ -14,16 +14,20 @@ var videoScheme = new Schema({
         enum: ["movie", "series"],
         required: true,
     },
-    video: {
-        type: String,
-        require: true,
-    },
-    chapter: {
-        type: Number,
-        require: function() {
-            return this.type === 'series'
+    video: [
+        {
+            type: String,
+            require: true,
         }
-    }
+    ],
+    chapter: [
+        {
+            type: Number,
+            require: function () {
+                return this.type === 'series'
+            }
+        }
+    ]
 }, {
     timestamps: true,
     collection: COLLECTION_NAME

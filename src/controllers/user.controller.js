@@ -63,6 +63,16 @@ class UserController {
             next(error)
         }
     }
+    
+
+    // unsave film
+    unsaveFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.unsaveFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
 
     // get saved film by id
     getSavedFilm = async (req, res, next) => {
@@ -73,7 +83,6 @@ class UserController {
             next(error)
         }
     }
-
 
     // get favorite film
     getFavoriteFilm = async (req, res, next) => {
@@ -101,7 +110,49 @@ class UserController {
             next(error)
         }
     }
+    
+    getRecommend = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getRecommend(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
 
+    addHistory = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.addHistory(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    getHistoryFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getHistoryFilm(req.params))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    deleteHistoryFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.deleteHistoryFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    payment = async (req, res, next) => {
+        try {
+            return (req.body.type === "momo") ? 
+                res.status(201).json(await UserService.paymentByMoMo(req.body))
+                :
+                res.status(201).json(await UserService.paymentByVNPay(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();
