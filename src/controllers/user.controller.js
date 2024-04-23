@@ -110,7 +110,7 @@ class UserController {
             next(error)
         }
     }
-    // chua xong
+    
     getRecommend = async (req, res, next) => {
         try {
             return res.status(201).json(await MovieService.getRecommend(req.body))

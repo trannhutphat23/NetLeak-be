@@ -406,7 +406,36 @@ class MovieService {
 
     static getRecommend = async ({userId}) => {
         try {
-            return userId;
+            const user = await userModel.findById(userId)
+            if (!user){
+                return {
+                    sucess: false,
+                    message: "User does not exist"
+                }
+            }
+            const rcmFilm = await historyModel.findOne({userId: user._id})
+            const formatRcmFilm = await rcmFilm.populate("filmId")
+            const detailFilmArr = formatRcmFilm.filmId.map((film) => {
+                return film
+            })
+            var genresIdArr = detailFilmArr.map((genre) => {
+                return genre.genres
+            })
+            var genresArr = []
+            await Promise.all(genresIdArr.map(async (genre) => {
+                await Promise.all(genre.map(async (gen) => {
+                    const existGen = await genreModel.findById(gen)
+                    if (existGen){
+                        genresArr.push(existGen.title)
+                    }
+                }))
+            }))
+
+            const genres = await genreModel.find({title: {$in: genresArr}})
+
+            return {
+                film: formatRcmFilm.filmId
+            }
         } catch (error) {
             return {
                 success: false,
