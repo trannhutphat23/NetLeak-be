@@ -4,17 +4,12 @@ const DOCUMENT_NAME = 'Video'
 const COLLECTION_NAME = 'Videos'
 
 var videoScheme = new Schema({
-    film_id: {
+    filmId: {
         type: Schema.Types.ObjectId,
         ref: 'Movie',
         required: true,
     },
-    type: {
-        type: String,
-        enum: ["movie", "series"],
-        required: true,
-    },
-    video: [
+    videoLink: [
         {
             type: String,
             require: true,
@@ -23,9 +18,6 @@ var videoScheme = new Schema({
     chapter: [
         {
             type: Number,
-            require: function () {
-                return this.type === 'series'
-            }
         }
     ]
 }, {
