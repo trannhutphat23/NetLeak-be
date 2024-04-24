@@ -9,17 +9,18 @@ var videoScheme = new Schema({
         ref: 'Movie',
         required: true,
     },
-    videoLink: [
+    videoList: [
         {
-            type: String,
-            require: true,
+            videoLink: {
+                type: String,
+                require: true,
+            },
+            chapter: {
+                type: String,
+                unique: true
+            }
         }
     ],
-    chapter: [
-        {
-            type: Number,
-        }
-    ]
 }, {
     timestamps: true,
     collection: COLLECTION_NAME

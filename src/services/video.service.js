@@ -7,37 +7,56 @@ class VideoService {
         try {
             const video = await videoModel.findOne({ filmId: filmId })
 
-            if(!video){
-                console.log(filmId, videoLink, chapter)
-                // const newVideo = new videoModel({
-                //     filmId, 
-                //     videoLink, 
-                //     chapter: parseInt(chapter)
-                // })
+            if (!video) {
+                const newVideo = new videoModel({
+                    filmId,
+                    videoList: {
+                        videoLink,
+                        chapter: parseInt(chapter)
+                    }
+                })
 
-                // const savedVideo = await newVideo.save()
+                const savedVideo = await newVideo.save()
 
                 return {
                     success: true,
-                    message: "Video has been added to the list",
+                    message: "Video has been added",
                     savedVideo
                 }
             }
-            else{
-                if (video.videoLink.some(vidLink => vidLink == video)) {
+            else {
+                if (video.videoList.some(vid => vid.videoLink == videoLink)) {
                     return {
                         success: false,
-                        message: "video already added to Film",
+                        message: "Video already added to Film",
                     }
                 }
                 else {
-                    console.log(video.videoLink)
-                    
+                    if (video.videoList.some(vid => vid.chapter == chapter)){
+                        return {
+                            success: false,
+                            message: "Chapter are duplicated",
+                        }
+                    }
+                    else {
+                        const videoChapter = {
+                            videoLink,
+                            chapter: parseInt(chapter)
+                        }
+
+                        video.videoList.push(videoChapter)
+                        const savedVideo = await video.save()
+
+                        return {
+                            success: true,
+                            message: "Video has been added",
+                            savedVideo
+                        }
+                    }
+
                 }
 
             }
-
-
         } catch (error) {
             return {
                 success: false,

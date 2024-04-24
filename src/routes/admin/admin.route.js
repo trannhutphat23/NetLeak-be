@@ -73,7 +73,7 @@ router.put('/films/:id', MovieController.updateMovie)
 router.delete('/films', MovieController.deleteMovie)
 
 // add new video of film
-router.post('/videos', VideoController.addVideo)
+router.post('/videos',upload.single(""), VideoController.addVideo)
 
 // add new payment package
 router.post('/payments', PaymentController.addPayment)
