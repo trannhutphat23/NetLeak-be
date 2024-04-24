@@ -9,6 +9,9 @@ var videoScheme = new Schema({
         ref: 'Movie',
         required: true,
     },
+    type:{
+        type: Boolean,
+    },
     videoList: [
         {
             videoLink: {
@@ -16,8 +19,8 @@ var videoScheme = new Schema({
                 require: true,
             },
             chapter: {
-                type: String,
-                unique: true
+                type: Number,
+                min: 0,
             }
         }
     ],

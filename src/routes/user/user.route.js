@@ -9,6 +9,10 @@ router.get('/listAllUsers', AuthService.verifyToken, UserController.listAllUsers
 router.patch('/updatePassword', AuthService.verifyToken, UserController.updatePassword)
 // update account user by id
 router.patch('/update/account/:id', AuthService.verifyToken, UserController.updateAccount)
+// get video of film
+router.get('/video',AuthService.verifyToken,UserController.getVideo)
+// get detail film
+router.get('/films/detailFilm', AuthService.verifyToken, UserController.getDetailFilm)
 // filter film by genre
 router.get('/films', AuthService.verifyToken, UserController.getFilmsByGenres)
 // rating film
@@ -21,13 +25,15 @@ router.post('/save', AuthService.verifyToken, UserController.saveFilm)
 router.get('/savedFilm/:id', AuthService.verifyToken, UserController.getSavedFilm)
 // unsave film
 router.delete('/unsaved', AuthService.verifyToken, UserController.unsaveFilm)
+// get favorite film by userId
+router.get('/favorite/:userId', AuthService.verifyToken, UserController.getFavoriteFilmByUserId)
 // get favorite film
 router.get('/favorite', AuthService.verifyToken, UserController.getFavoriteFilm)
 // add favorite film
 router.post('/favorite', AuthService.verifyToken, UserController.addFavoriteFilm)
 // delete favorite film
 router.delete('/favorite', AuthService.verifyToken, UserController.deleteFavoriteFilm)
-// get recommend list film from save list film
+// get recommend list film from history list film
 router.get('/recommend', AuthService.verifyToken, UserController.getRecommend)
 // add to history view
 router.post('/history', AuthService.verifyToken, UserController.addHistory)
@@ -37,5 +43,6 @@ router.get('/historyFilm/:id', AuthService.verifyToken, UserController.getHistor
 router.delete('/historyFilm', AuthService.verifyToken, UserController.deleteHistoryFilm)
 // payment
 router.post('/payment', AuthService.verifyToken, UserController.payment)
+
 
 module.exports = router
