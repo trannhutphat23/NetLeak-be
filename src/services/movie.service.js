@@ -358,7 +358,7 @@ class MovieService {
             }
             const savedFilm = await savedMovieModel.findOne({ userId: user._id })
 
-            if (!savedFilm) {
+            if (!savedFilm){
                 return {
                     success: false,
                     message: "No films have been saved"
@@ -366,7 +366,7 @@ class MovieService {
             }
             const formatSavedFilm = await savedFilm.populate("filmId")
 
-            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatSavedFilm });
+            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatSavedFilm});
         } catch (error) {
             return {
                 success: false,
@@ -454,6 +454,76 @@ class MovieService {
                 while (true)
             }
             return recommendedFilms
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
+    static getHistoryFilm = async (params) => {
+        try {
+            const ID = params.id
+
+            const user = await userModel.findById(ID)
+            if (!user) {
+                return {
+                    sucess: false,
+                    message: "User does not exist"
+                }
+            }
+            const historyFilm = await historyModel.findOne({userId: user._id})
+
+            if (!historyFilm){
+                return {
+                    success: false,
+                    message: "No films have been saved"
+                }
+            }
+            const formatHistoryFilm = await historyFilm.populate("filmId")
+
+            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatHistoryFilm});
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            } 
+        }
+    }
+
+    static getRecommend = async ({userId}) => {
+        try {
+            const user = await userModel.findById(userId)
+            if (!user){
+                return {
+                    sucess: false,
+                    message: "User does not exist"
+                }
+            }
+            const rcmFilm = await historyModel.findOne({userId: user._id})
+            const formatRcmFilm = await rcmFilm.populate("filmId")
+            const detailFilmArr = formatRcmFilm.filmId.map((film) => {
+                return film
+            })
+            var genresIdArr = detailFilmArr.map((genre) => {
+                return genre.genres
+            })
+            var genresArr = []
+            await Promise.all(genresIdArr.map(async (genre) => {
+                await Promise.all(genre.map(async (gen) => {
+                    const existGen = await genreModel.findById(gen)
+                    if (existGen){
+                        genresArr.push(existGen.title)
+                    }
+                }))
+            }))
+
+            const genres = await genreModel.find({title: {$in: genresArr}})
+
+            return {
+                film: formatRcmFilm.filmId
+            }
         } catch (error) {
             return {
                 success: false,

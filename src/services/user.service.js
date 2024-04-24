@@ -60,6 +60,7 @@ class UserService {
                 }
             }
             const existUser = await userModel.findById(id).lean()
+
             if (!existUser) {
                 return {
                     success: false,
@@ -157,7 +158,6 @@ class UserService {
                     message: "User does not exist"
                 }
             }
-
             const film = await movieModel.findById(filmId)
             const existSavedFilm = await savedMovieModel.findOne({ userId: user._id, filmId: film._id })
             if(existSavedFilm){
