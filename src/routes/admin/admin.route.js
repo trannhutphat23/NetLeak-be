@@ -5,6 +5,7 @@ const CastController = require('../../controllers/cast.controller')
 const StudioController = require('../../controllers/studio.controller')
 const MovieController = require('../../controllers/movie.controller')
 const PaymentController = require('../../controllers/payment.controller')
+const VideoController = require('../../controllers/video.controller')
 const uploadImage  = require('../../utils/uploadImage')
 const multer = require('multer')
 const cloudinary = require('../../configs/config.cloudinary')
@@ -70,6 +71,9 @@ router.put('/films/:id', MovieController.updateMovie)
 
 // delete film by id
 router.delete('/films', MovieController.deleteMovie)
+
+// add new video of film
+router.post('/videos',upload.single(""), VideoController.addVideo)
 
 // add new payment package
 router.post('/payments', PaymentController.addPayment)

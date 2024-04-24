@@ -53,14 +53,15 @@ class UserService {
     
     static updateAccount = async ({id}, {name, sexuality, phone}) => {
         try {
-            if (id.length > 24){
+            if (id.length > 24) {
                 return {
                     success: false,
                     message: "User does not exist"
                 }
             }
             const existUser = await userModel.findById(id).lean()
-            if (!existUser){
+
+            if (!existUser) {
                 return {
                     success: false,
                     message: "User does not exist"
@@ -129,10 +130,10 @@ class UserService {
                     path: "filmId",
                     select: '_id plot title fullplot released lastupdated type'
                 })).
-                populate({
-                    path: "userId",
-                    select: '_id email name sexuality phone favorites roles'
-                })
+                    populate({
+                        path: "userId",
+                        select: '_id email name sexuality phone favorites roles'
+                    })
 
                 return {
                     success: true,
@@ -157,7 +158,6 @@ class UserService {
                     message: "User does not exist"
                 }
             }
-
             const film = await movieModel.findById(filmId)
             const existSavedFilm = await savedMovieModel.findOne({ userId: user._id, filmId: film._id })
             if(existSavedFilm){
