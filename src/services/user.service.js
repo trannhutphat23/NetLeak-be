@@ -369,78 +369,8 @@ class UserService {
         }
     }
 
-    static paymentByMoMo = async ({amount, payInfo, redirectUrl}) => {
+    static paymentByMoMo = async ({amount, orderInfo, redirectUrl}) => {
         try {
-            // var partnerCode = "MOMO";
-            // var accessKey = "F8BBA842ECF85";
-            // var secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
-            // var requestId = partnerCode + new Date().getTime();
-            // var orderId = requestId;
-            // var orderInfo = payInfo;
-            // var ipnUrl = "https://google.com";
-            // var requestType = "captureWallet"
-            // var extraData = "";
-
-            // //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
-            // var rawSignature = "accessKey="+accessKey+"&amount=" + amount+"&extraData=" + extraData+"&ipnUrl=" + ipnUrl+"&orderId=" + orderId+"&orderInfo=" + orderInfo+"&partnerCode=" + partnerCode +"&redirectUrl=" + redirectUrl+"&requestId=" + requestId+"&requestType=" + requestType
-
-            // var signature = crypto.createHmac('sha256', secretkey)
-            //     .update(rawSignature)
-            //     .digest('hex');
-
-            // const requestBody = JSON.stringify({
-            //     partnerCode : partnerCode,
-            //     accessKey : accessKey,
-            //     requestId : requestId,
-            //     amount : amount,
-            //     orderId : orderId,
-            //     orderInfo : orderInfo,
-            //     redirectUrl : redirectUrl,
-            //     ipnUrl : ipnUrl,
-            //     extraData : extraData,
-            //     requestType : requestType,
-            //     signature : signature,
-            //     lang: 'vi'
-            // });
-
-            // const options = {
-            //     hostname: 'test-payment.momo.vn',
-            //     port: 443, // https
-            //     path: '/v2/gateway/api/create',
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'Content-Length': Buffer.byteLength(requestBody)
-            //     }
-            // }
-
-            // return new Promise((resolve, reject) => {
-            //     const req = https.request(options, res => {
-            //         console.log(`Status: ${res.statusCode}`);
-            //         console.log(`Headers: ${JSON.stringify(res.headers)}`);
-            //         res.setEncoding('utf8');
-            //         res.on('data', (body) => {
-            //             console.log('Body: ');
-            //             console.log(body);
-            //             console.log('payUrl: ');
-            //             var urlPayment = JSON.parse(body).payUrl
-            //             resolve(urlPayment);
-            //         });
-            //         res.on('end', () => {
-            //             console.log('No more data in response.');
-            //         });
-            //     })
-
-            //     req.on('error', (e) => {
-            //         console.log(`problem with request: ${e.message}`);
-            //         reject(error);
-            //     });
-            //     // write data to request body
-            //     req.write(requestBody);
-            //     req.end();
-            // })
-
-
             // test momo:
             // NGUYEN VAN A
             // 9704 0000 0000 0018
@@ -448,10 +378,8 @@ class UserService {
             // OTP
             // các thông tin đổi để hiện trên Hóa đơn thanh toán: orderInfo, ,amount, orderID,...
             //Đổi redirectURL, ipnURL theo trang web của mình
-
             var accessKey = 'F8BBA842ECF85';
             var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';//key để test // không đổi
-            var orderInfo = 'pay with MoMo'; // thông tin đơn hàng
             var partnerCode = 'MOMO';
             var redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b'; // Link chuyển hướng tới sau khi thanh toán hóa đơn
             var ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';   //trang truy vấn kết quả, để trùng với redirect
