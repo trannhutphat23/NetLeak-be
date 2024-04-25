@@ -2,6 +2,7 @@ const userModel = require('../models/user.model');
 const movieModel = require('../models/movie.model');
 const savedMovieModel = require('../models/saved_movie.model')
 const historyModel = require('../models/history.model')
+const videoModel = require('../models/video.model');
 const bcrypt = require('bcrypt')
 const crypto = require('crypto');
 const https = require('https');
@@ -181,10 +182,24 @@ class UserService {
         }
     }
 
-    static addFavoriteFilm = async ({ film_id, user_id }) => {
+    static addFavoriteFilm = async ({ filmId, userId }) => {
         try {
-            const movie = await movieModel.findById(film_id)
-            const user = await userModel.findById(user_id)
+            const movie = await movieModel.findById(filmId)
+            const user = await userModel.findById(userId)
+
+            if (!user){
+                return {
+                    success: false,
+                    message: "User does not exist"
+                }
+            }
+
+            if (!movie){
+                return {
+                    success: false,
+                    message: "Film does not exist"
+                }
+            }
 
             const checkIsSaveAlready = user.favorites.some((id) => {
                 return id.toString() == movie._id.toString()
@@ -197,7 +212,7 @@ class UserService {
                 }
             }
             else {
-                user.favorites.push(film_id)
+                user.favorites.push(filmId)
                 await user.save()
                 return {
                     success: true,
@@ -217,10 +232,24 @@ class UserService {
         }
     }
 
-    static deleteFavoriteFilm = async ({ film_id, user_id }) => {
+    static deleteFavoriteFilm = async ({ filmId, userId }) => {
         try {
-            const movie = await movieModel.findById(film_id)
-            const user = await userModel.findById(user_id)
+            const movie = await movieModel.findById(filmId)
+            const user = await userModel.findById(userId)
+
+            if (!user){
+                return {
+                    success: false,
+                    message: "User does not exist"
+                }
+            }
+
+            if (!movie){
+                return {
+                    success: false,
+                    message: "Film does not exist"
+                }
+            }
 
             const checkIsSaveAlready = user.favorites.some((id) => {
                 return id.toString() === movie._id.toString()
@@ -259,13 +288,119 @@ class UserService {
         }
     }
 
-    static getFavoriteFilm = async ({ user_id }) => {
+    static getFavoriteFilm = async ({ userId }) => {
         try {
-            const userInfo = await userModel.findById(user_id).populate('favorites')
+            const user = await userModel.findById(userId).populate({
+                path: "favorites",
+                select: '_id plot genres cast image title fullplot released directors imdb type'
+            })
 
-            const movies = userInfo.favorites
+            if (!user){
+                return {
+                    success: false,
+                    message: "User does not exist"
+                }
+            }
+
+            const movies = user.favorites
 
             return movies
+
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message,
+            }
+        }
+    }
+
+    static getVideo = async ({ filmId }) => {
+        try {
+            const video = await videoModel.findOne({ filmId: filmId })
+            
+            let videoList = []
+
+            if(video){
+                videoList = video.videoList
+            }
+
+            if (video) {
+                return videoList
+            }
+            else {
+                return {
+                    success: false,
+                    message: "Can not find film",
+                }
+
+            }
+
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message,
+            }
+        }
+    }
+
+    static getDetailFilm = async ({ filmId }) => {
+        try {
+            const film = await movieModel.findById(filmId).populate({
+                path: "cast",
+                select: '_id avatar name description movies'
+            }).populate({
+                path: "directors",
+                select: '_id name movies'
+            })
+            const video = await videoModel.findOne({filmId: filmId})
+            const allFilms = await movieModel.find()
+
+            if (!film){
+                return {
+                    success: false,
+                    message: "Film does not exist"
+                }
+            }
+
+            let detailFilm = getData({
+                fields: ['cast', 'directors'],
+                object: film
+            })
+
+            detailFilm.videoList = video.videoList
+
+            const genreList = film.genres
+            console.log(genreList)
+            let recommendedFilms = []
+
+            //đề xuất 15 bộ
+            // for(let i=0;i<15;i++)
+            //test
+            for(let i=0;i<3;i++)
+            {
+                const ranNumGenre = Math.floor(Math.random() * genreList.length)
+
+                do{
+                    const ranNumFilm = Math.floor(Math.random() * allFilms.length)
+
+                    if (allFilms[ranNumFilm].genres.some(genre => genre.toString() == genreList[ranNumGenre].toString())) {
+                        if (
+                            recommendedFilms.some(id => {
+                                return id.toString() == allFilms[ranNumFilm]._id.toString()
+                            })
+                        ) { }
+                        else {
+                            recommendedFilms.push(allFilms[ranNumFilm]._id)
+                            break
+                        }   
+                    }
+                }
+                while(true)
+            }
+
+            detailFilm.recommendedFilms = recommendedFilms
+
+            return detailFilm
 
         } catch (error) {
             return {

@@ -241,10 +241,9 @@ class MovieService {
         }
     }
 
-    static ratingFilm = async (query) => {
+    static ratingFilm = async ({emailId, filmId, rate}) => {
         try {
-            const { id, filmId, rate } = query
-            const user = await userModel.findById(id)
+            const user = await userModel.findById(emailId)
             const film = await movieModel.findById(filmId)
             const existRating = await ratingModel.find({ email: user._id, film_id: film._id })
             if (existRating) {
