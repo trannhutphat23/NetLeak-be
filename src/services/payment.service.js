@@ -1,4 +1,5 @@
 const PaymentPackageModel = require('../models/payment_package.model')
+const paymentModel = require('../models/payment.model')
 const userModel = require('../models/user.model')
 const movieModel = require('../models/movie.model')
 const getData = require('../utils/formatRes')
@@ -239,8 +240,18 @@ class PaymentService {
                     message: "Payment package does not exist"
                 }
             }
-
-            return 1
+            const newPayment = new paymentModel({
+                email: email,
+                package_id: package_id,
+                method: method,
+                total: total
+            })
+            const savedPayment = await newPayment.save()
+            // const formatNewPayment = await savedPayment.populate({
+            //     path: 'user',
+            //     select: '_id email name'
+            // })
+            return savedPayment
         } catch (error) {
             return {
                 success: false,
