@@ -5,6 +5,7 @@ const CastController = require('../../controllers/cast.controller')
 const StudioController = require('../../controllers/studio.controller')
 const MovieController = require('../../controllers/movie.controller')
 const PaymentController = require('../../controllers/payment.controller')
+const VideoController = require('../../controllers/video.controller')
 const uploadImage  = require('../../utils/uploadImage')
 const multer = require('multer')
 const cloudinary = require('../../configs/config.cloudinary')
@@ -71,6 +72,15 @@ router.put('/films/:id', MovieController.updateMovie)
 // delete film by id
 router.delete('/films', MovieController.deleteMovie)
 
+// get video of film
+router.get('/videos',upload.single(""),VideoController.getVideo)
+
+// add new video of film
+router.post('/videos',upload.single(""), VideoController.addVideo)
+
+// delete video of film
+router.delete('/videos',upload.single(""), VideoController.deleteVideo)
+
 // add new payment package
 router.post('/payments', PaymentController.addPayment)
 
@@ -85,5 +95,8 @@ router.get('/payments', PaymentController.listPayments)
 
 // get payment package by id
 router.get('/payments/:id', PaymentController.getPayment)
+
+// get revenue
+router.get('/revenue', AdminController.getRevenue)
 
 module.exports = router

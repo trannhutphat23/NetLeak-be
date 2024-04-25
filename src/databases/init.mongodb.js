@@ -17,7 +17,7 @@ class Database {
             maxPoolSize: 50
         })
         .then( _ => {
-            console.log("Connected Success \n", countConnect())
+            console.log("Connected Success\n", countConnect())
         })
         .catch( err => console.log(err))
     }

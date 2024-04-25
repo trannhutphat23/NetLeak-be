@@ -1,32 +1,39 @@
 const { model, Schema, Types } = require('mongoose');
-
+const movieModel = require('./movie.model')
 const DOCUMENT_NAME = 'Video'
 const COLLECTION_NAME = 'Videos'
 
 var videoScheme = new Schema({
-    film_id: {
+    filmId: {
         type: Schema.Types.ObjectId,
         ref: 'Movie',
         required: true,
     },
-    type: {
-        type: String,
-        enum: ["movie", "series"],
-        required: true,
+    type:{
+        type: Boolean,
     },
-    video: {
-        type: String,
-        require: true,
-    },
-    chapter: {
-        type: Number,
-        require: function() {
-            return this.type === 'series'
+    videoList: [
+        {
+            videoLink: {
+                type: String,
+                require: true,
+            },
+            chapter: {
+                type: Number,
+                min: 0,
+            }
         }
-    }
+    ],
 }, {
     timestamps: true,
     collection: COLLECTION_NAME
+});
+
+videoScheme.pre('save',async function(next) {
+  const film = await movieModel.findById(this.filmId);
+  this.videoList.chapter
+  console.log(this.videoList.chapter)
+  next();
 });
 
 module.exports = model(DOCUMENT_NAME, videoScheme);

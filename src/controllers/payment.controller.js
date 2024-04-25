@@ -3,7 +3,7 @@ const PaymentService = require('../services/payment.service')
 class PaymentController {
     addPayment = async (req, res, next) => {
         try {
-            return res.status(201).json(await PaymentService.addPayment(req.body))
+            return res.status(201).json(await PaymentService.addPaymentPackage(req.body))
         } catch (error){
             next(error)
         }
@@ -11,7 +11,7 @@ class PaymentController {
 
     updatePayment = async (req, res, next) => {
         try {
-            return res.status(201).json(await PaymentService.updatePayment(req.params, req.body))
+            return res.status(201).json(await PaymentService.updatePaymentPackage(req.params, req.body))
         } catch (error){
             next(error)
         }
@@ -19,7 +19,7 @@ class PaymentController {
 
     listPayments = async (req, res, next) => {
         try {
-            return res.status(201).json(await PaymentService.listPayments())
+            return res.status(201).json(await PaymentService.listPaymentPackage())
         } catch (error){
             next(error)
         }
@@ -27,7 +27,7 @@ class PaymentController {
 
     getPayment = async (req, res, next) => {
         try {
-            return res.status(201).json(await PaymentService.getPayment(req.params))
+            return res.status(201).json(await PaymentService.getPaymentPackage(req.params))
         } catch (error){
             next(error)
         }
@@ -35,7 +35,7 @@ class PaymentController {
 
     deletePayment = async (req, res, next) => {
         try {
-            return res.status(201).json(await PaymentService.deletePayment(req.params))
+            return res.status(201).json(await PaymentService.deletePaymentPackage(req.params))
         } catch (error){
             next(error)
         }
