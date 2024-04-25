@@ -32,7 +32,7 @@ class UserController {
     // rating film
     ratingFilm = async (req, res, next) => {
         try {
-            return res.status(201).json(await MovieService.ratingFilm(req.query))
+            return res.status(201).json(await MovieService.ratingFilm(req.body))
         } catch (error){
             next(error)
         }
@@ -41,7 +41,7 @@ class UserController {
     // delete rating film
     deleteRatingFilm = async (req, res, next) => {
         try {
-            return res.status(201).json(await MovieService.deleteRatingFilm(req.query))
+            return res.status(201).json(await MovieService.deleteRatingFilm(req.body))
         } catch (error){
             next(error)
         }
@@ -89,6 +89,15 @@ class UserController {
     getFavoriteFilm = async (req, res, next) => {
         try {
             return res.status(201).json(await UserService.getFavoriteFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    // get favorite film by userId
+    getFavoriteFilmByUserId = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.getFavoriteFilm(req.params))
         } catch (error){
             next(error)
         }
@@ -155,6 +164,22 @@ class UserController {
     addPayment = async (req, res, next) => {
         try {
             return res.status(201).json(await PaymentService.addPayment(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+    
+    getDetailFilm = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.getDetailFilm(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    getVideo = async (req, res, next) => {
+        try {
+            return res.status(201).json(await UserService.getVideo(req.body))
         } catch (error){
             next(error)
         }
