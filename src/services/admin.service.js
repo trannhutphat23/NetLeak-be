@@ -52,7 +52,7 @@ class UserService {
 
             return {
                 monthlyTotals: monthlyTotals,
-                toatlRevenue: totalSum
+                totalRevenue: totalSum
             };
         } catch (error) {
             return {
