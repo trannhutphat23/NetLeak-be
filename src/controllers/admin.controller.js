@@ -18,6 +18,14 @@ class AdminController {
             next(error)
         }
     }
+
+    getRevenue = async (req, res, next) => {
+        try {
+            return res.status(201).json(await AdminService.getRevenue())
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new AdminController();

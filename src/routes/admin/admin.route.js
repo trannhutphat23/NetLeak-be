@@ -96,4 +96,7 @@ router.get('/payments', PaymentController.listPayments)
 // get payment package by id
 router.get('/payments/:id', PaymentController.getPayment)
 
+// get revenue
+router.get('/revenue', AdminController.getRevenue)
+
 module.exports = router
