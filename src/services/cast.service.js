@@ -10,6 +10,13 @@ class CastService {
         try {
             const cloudinaryFolder = 'NetLeak/Cast_avatar';
             const avatarUrl = await uploadImage(filePath, cloudinaryFolder);
+            const existCast = await castModel.findOne({ name: body.name })
+            if (existCast){
+                return {
+                    success: false,
+                    message: "Cast already exists"
+                }
+            }
             const newCast = new castModel({
                 avatar: avatarUrl,
                 name: body.name,
