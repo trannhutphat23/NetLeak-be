@@ -50,9 +50,20 @@ class UserService {
                 return acc;
             }, {});
 
+            const yearlyTotals = payments.reduce((acc, item) => {
+                const date = new Date(item.date);
+                const year = date.getFullYear();
+                acc[year] = (acc[year] || 0) + item.total;
+                return acc;
+            }, {});
+
             return {
                 monthlyTotals: monthlyTotals,
-                totalRevenue: totalSum
+                yearlyTotals: yearlyTotals,
+                totalRevenue: totalSum,
+                payments: _.map(payments, obj => getData({ 
+                    fields: ["_id", "email", "package_id", "method", "total", "date", "expired"], 
+                    object: obj }))
             };
         } catch (error) {
             return {

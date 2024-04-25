@@ -240,6 +240,17 @@ class PaymentService {
                     message: "Payment package does not exist"
                 }
             }
+            const existPayment = await paymentModel.findOne({
+                email: email, 
+                package_id: package_id,
+                expired: { $gt: Date.now() }
+            })
+            if (existPayment){
+                return {
+                    success: false,
+                    message: "You are already buy this payment package"
+                }
+            }
             const newPayment = new paymentModel({
                 email: email,
                 package_id: package_id,
@@ -247,10 +258,7 @@ class PaymentService {
                 total: total
             })
             const savedPayment = await newPayment.save()
-            // const formatNewPayment = await savedPayment.populate({
-            //     path: 'user',
-            //     select: '_id email name'
-            // })
+
             return savedPayment
         } catch (error) {
             return {
