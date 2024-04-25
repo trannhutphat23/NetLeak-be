@@ -37,5 +37,7 @@ router.get('/historyFilm/:id', AuthService.verifyToken, UserController.getHistor
 router.delete('/historyFilm', AuthService.verifyToken, UserController.deleteHistoryFilm)
 // payment
 router.post('/payment', AuthService.verifyToken, UserController.payment)
+// add a new payment
+router.post('/payment/add', AuthService.verifyToken, UserController.addPayment)
 
 module.exports = router
