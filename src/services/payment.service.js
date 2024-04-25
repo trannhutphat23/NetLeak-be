@@ -5,7 +5,7 @@ const getData = require('../utils/formatRes')
 const _ = require('lodash');
 
 class PaymentService {
-    static addPayment = async ({title, cost, description}) => {
+    static addPaymentPackage = async ({title, cost, description}) => {
         try {
             const existPaymentPackage = await PaymentPackageModel.findOne({title})
             if (existPaymentPackage) {
@@ -30,7 +30,7 @@ class PaymentService {
         }
     }
 
-    static updatePayment = async ({id}, {title, cost, description}) => {
+    static updatePaymentPackage = async ({id}, {title, cost, description}) => {
         try {
             const existPaymentPackage = await PaymentPackageModel.findById(id)
             if (!existPaymentPackage){
@@ -61,7 +61,7 @@ class PaymentService {
         }
     }
 
-    static listPayments = async () => {
+    static listPaymentPackage = async () => {
         try {
             const paymentPackages = await PaymentPackageModel.find().lean()
 
@@ -76,7 +76,7 @@ class PaymentService {
         }
     }
 
-    static getPayment = async ({id}) => {
+    static getPaymentPackage = async ({id}) => {
         try {
             const existPaymentPackage = await PaymentPackageModel.findById(id);
             if (!existPaymentPackage) {
@@ -95,7 +95,7 @@ class PaymentService {
         }
     }
 
-    static deletePayment = async ({id}) => {
+    static deletePaymentPackage = async ({id}) => {
         try {
             const existPaymentPackage = await PaymentPackageModel.findById(id)
             if (!existPaymentPackage){
@@ -214,8 +214,7 @@ class PaymentService {
                 req.write(requestBody);
                 req.end();
             })
-
-            // dữ liệu trả về: ?partnerCode=MOMO&orderId=MOMO1713984978976&requestId=MOMO1713984978976&amount=1000&orderInfo=30k&orderType=momo_wallet&transId=4029232035&resultCode=0&message=Thành+công.&payType=credit&responseTime=1713985045244&extraData=&signature=0d6f0e650eb5d320c3a65df17a620f01c09d0eae742d3eb7e84177b2ebda6fe0
+        // dữ liệu trả về khi thành công: ?partnerCode=MOMO&orderId=MOMO1713984978976&requestId=MOMO1713984978976&amount=1000&orderInfo=30k&orderType=momo_wallet&transId=4029232035&resultCode=0&message=Thành+công.&payType=credit&responseTime=1713985045244&extraData=&signature=0d6f0e650eb5d320c3a65df17a620f01c09d0eae742d3eb7e84177b2ebda6fe0
         } catch (error) {
             return {
                 success: false,
@@ -240,6 +239,7 @@ class PaymentService {
                     message: "Payment package does not exist"
                 }
             }
+
             return 1
         } catch (error) {
             return {
