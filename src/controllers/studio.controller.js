@@ -3,7 +3,7 @@ const StudioService = require('../services/studio.service')
 class StudioController {
     addStudio = async (req, res, next) => {
         try {
-            return res.status(201).json(await StudioService.addStudio(req.body))
+            return res.status(201).json(await StudioService.addStudio(req.file.path, req.body))
         } catch (error){
             next(error)
         }
@@ -27,7 +27,7 @@ class StudioController {
 
     deleteStudio = async (req, res, next) => {
         try {
-            return res.status(201).json(await StudioService.deleteStudio(req.params))
+            return res.status(201).json(await StudioService.deleteStudio(req.query))
         } catch (error){
             next(error)
         }
