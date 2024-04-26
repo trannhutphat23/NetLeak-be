@@ -46,7 +46,7 @@ router.get('/casts/:id', CastController.getCast)
 router.delete('/casts', CastController.deleteCast)
 
 // add new studio
-router.post('/studios', StudioController.addStudio)
+router.post('/studios', upload.single('avatar'), StudioController.addStudio)
 
 // list studios
 router.get('/studios', StudioController.getStudios)
@@ -55,7 +55,7 @@ router.get('/studios', StudioController.getStudios)
 router.get('/studios/:id', StudioController.getStudio)
 
 // delete studio by id
-router.delete('/studios/:id', StudioController.deleteStudio)
+router.delete('/studios', StudioController.deleteStudio)
 
 // add new film
 router.post('/films', upload.array('filmImg', 4), MovieController.addMovie)
