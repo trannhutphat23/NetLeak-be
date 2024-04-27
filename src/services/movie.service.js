@@ -28,7 +28,6 @@ class MovieService {
 
             const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
             const filmImgArr = [];
-            console.log(files)
             files.forEach((file) => {
                 var originalName = "";
                 if (file.originalname.includes("poster")) {
@@ -139,17 +138,77 @@ class MovieService {
         }
     }
 
-    static updateMovie = async (params = { id }, body = { plot, title, fullplot, type }) => {
+    static updateMovie = async (files, params = { id }, body = { plot, title, fullplot, type, release }) => {
         try {
             const ID = params.id;
-
+            const existMovie = await movieModel.findById(ID)
+            if (!existMovie){
+                return {
+                    success: false,
+                    message: "Movie does not exist"
+                }
+            }
+            
+            // UPLOAD NEW IMAGE TO CLOUDINARY
+            const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
+            const filmImgArr = [];
+            files.forEach((file) => {
+                var originalName = "";
+                if (file.originalname.includes("poster")) {
+                    originalName = "poster"
+                } else if (file.originalname.includes("banner")) {
+                    originalName = "banner"
+                } else {
+                    originalName = file.originalname.split(".")[0]
+                }
+                filmImgArr[originalName] = file
+            })
+            const fileResCloud = {
+                img: [],
+                poster: "",
+                banner: ""
+            }
+            for (const fileName in filmImgArr) {
+                if (filmImgArr.hasOwnProperty(fileName)) {
+                    const filePath = filmImgArr[fileName].path;
+                    const filmUrl = await uploadImage(filePath, cloudinaryFolder);
+                    if (fileName === "poster") {
+                        fileResCloud.poster = filmUrl
+                    } else if (fileName === "banner") {
+                        fileResCloud.banner = filmUrl
+                    } else {
+                        fileResCloud.img.push(filmUrl)
+                    }
+                }
+            }
             const data = {
+                image: fileResCloud,
                 plot: body.plot,
                 title: body.title,
                 fullplot: body.fullplot,
-                type: body.type
+                type: body.type,
+                release: body.release
             }
 
+            // DELETE IMAGE IN CLOUDINARY
+            const imgObj = existMovie.image
+            for (const key in imgObj) {
+                if (imgObj.hasOwnProperty(key)) {
+                    const url = imgObj[key]
+                    if (Array.isArray(url)) {
+                        url.map(async (u) => {
+                            const name = getName(u)
+                            const result = "NetLeak/Film_Image/" + name
+                            await deleteImage(result)
+                        })
+                    } else {
+                        const name = getName(url)
+                        const result = "NetLeak/Film_Image/" + name
+                        await deleteImage(result)
+                    }
+                }
+            }
+            // DELETE IN DB
             const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
 
             return updatedFilm;
