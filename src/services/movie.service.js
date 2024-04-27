@@ -114,11 +114,9 @@ class MovieService {
     static getMovies = async () => {
         try {
             const Movies = await movieModel.find({})
-                .populate("genres")
                 .populate("cast")
-                .populate("directors")
-
-            return Movies;
+                
+            return Movies
         } catch (error) {
             return {
                 success: false,
@@ -130,9 +128,7 @@ class MovieService {
     static getMovie = async (params) => {
         try {
             const film = await movieModel.findById(params.id)
-                .populate('genres')
                 .populate('cast')
-                .populate('directors')
 
             return film;
         } catch (error) {
