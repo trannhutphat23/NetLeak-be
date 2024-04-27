@@ -67,7 +67,7 @@ router.get('/films', MovieController.getMovies)
 router.get('/films/:id', MovieController.getMovie)
 
 // update film by id
-router.put('/films/:id', MovieController.updateMovie)
+router.put('/films/:id', upload.array('filmImg', 4), MovieController.updateMovie)
 
 // delete film by id
 router.delete('/films', MovieController.deleteMovie)

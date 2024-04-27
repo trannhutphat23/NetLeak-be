@@ -27,7 +27,7 @@ class MovieController {
 
     updateMovie = async (req, res, next) => {
         try {
-            return res.status(201).json(await MovieService.updateMovie(req.params, req.body))
+            return res.status(201).json(await MovieService.updateMovie(req.files, req.params, req.body))
         } catch (error){
             next(error)
         }
