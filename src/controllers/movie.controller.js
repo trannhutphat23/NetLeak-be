@@ -3,6 +3,7 @@ const MovieService = require('../services/movie.service')
 class MovieController {
     addMovie = async (req, res, next) => {
         try {
+            console.log(req.body)
             return res.status(201).json(await MovieService.addMovie(req.files, req.body))
         } catch (error){
             next(error)
