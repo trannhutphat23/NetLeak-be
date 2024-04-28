@@ -57,21 +57,22 @@ class MovieService {
                     }
                 }
             }
+            console.log(fileResCloud)
 
             const newMovie = new movieModel({
-                plot: body.plot,
-                genres: body.genres,
-                cast: body.cast,
-                image: fileResCloud,
-                title: body.title,
-                fullplot: body.fullplot,
-                released: body.released,
-                directors: body.directors,
-                imdb: { rating: null, vote: null },
-                type: body.type
+                "plot": body.plot,
+                "genres": body.genres,
+                "cast": body.cast,
+                "image": fileResCloud,
+                "title": body.title,
+                "fullplot": body.fullplot,
+                "released": body.released,
+                "directors": body.directors,
+                "imdb": { rating: null, vote: null },
+                "type": body.type
             })
 
-            const savedMovie = await newMovie.save();
+            const savedMovie = await newMovie.save()
 
             if (body.genres) {
                 var genre = await genreModel.find({ _id: { $in: body.genres } })
@@ -101,7 +102,7 @@ class MovieService {
                 .populate("cast"))
                 .populate("directors")
 
-            return NewMovie;
+            return savedMovie;
         } catch (error) {
             return {
                 success: false,
