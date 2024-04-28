@@ -6,7 +6,7 @@ const COLLECTION_NAME = 'Movies'
 var movieSchema = new Schema({
     plot: {
         type: String,
-        required: true,
+        // required: true,
     },
     genres: [
         {
