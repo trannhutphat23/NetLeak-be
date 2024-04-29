@@ -12,6 +12,10 @@ const cloudinary = require('../../configs/config.cloudinary')
 const upload = multer({ dest: 'uploads/' })
 const router = express.Router()
 
+multer({
+    limits: { fieldSize: 25 * 1024 * 1024 }
+  })
+
 // add new genre
 router.post('/genres', GenreController.addGenre)
 
@@ -73,7 +77,7 @@ router.put('/films/:id', upload.array('filmImg', 4), MovieController.updateMovie
 router.delete('/films', MovieController.deleteMovie)
 
 // get video of film
-router.get('/videos',upload.single(""),VideoController.getVideo)
+router.get('/videos/:filmId', VideoController.getVideo)
 
 // add new video of film
 router.post('/videos',upload.single(""), VideoController.addVideo)

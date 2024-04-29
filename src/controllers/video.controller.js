@@ -11,7 +11,8 @@ class VideoController {
 
     deleteVideo = async (req, res, next) => {
         try {
-            return res.status(201).json(await VideoService.deleteVideo(req.body))
+            console.log(req.query.filmId, req.query.videoList)
+            return res.status(201).json(await VideoService.deleteVideo(req.query))
         } catch (error){
             next(error)
         }
@@ -19,7 +20,7 @@ class VideoController {
 
     getVideo = async (req, res, next) => {
         try {
-            return res.status(201).json(await VideoService.getVideo(req.body))
+            return res.status(201).json(await VideoService.getVideo(req.params))
         } catch (error){
             next(error)
         }
