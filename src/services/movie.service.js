@@ -149,8 +149,7 @@ class MovieService {
                     message: "Movie does not exist"
                 }
             }
-            
-            if (!files){
+            if (files.length!=0){
                 // UPLOAD NEW IMAGE TO CLOUDINARY
                 const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
                 const filmImgArr = [];
