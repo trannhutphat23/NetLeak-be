@@ -139,7 +139,7 @@ class MovieService {
         }
     }
 
-    static updateMovie = async (files, params = { id }, body = { plot, title, fullplot, type, release }) => {
+    static updateMovie = async (files, params = { id }, body = { plot, title, fullplot, type, released, genres, cast, directors }) => {
         try {
             const ID = params.id;
             const existMovie = await movieModel.findById(ID)
@@ -188,7 +188,10 @@ class MovieService {
                 title: body.title,
                 fullplot: body.fullplot,
                 type: body.type,
-                release: body.release
+                released: body.released,
+                genres: body.genres,
+                cast: body.cast,
+                directors: body.directors
             }
 
             // DELETE IMAGE IN CLOUDINARY
