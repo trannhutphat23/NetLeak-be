@@ -150,72 +150,92 @@ class MovieService {
                 }
             }
             
-            // UPLOAD NEW IMAGE TO CLOUDINARY
-            const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
-            const filmImgArr = [];
-            files.forEach((file) => {
-                var originalName = "";
-                if (file.originalname.includes("poster")) {
-                    originalName = "poster"
-                } else if (file.originalname.includes("banner")) {
-                    originalName = "banner"
-                } else {
-                    originalName = file.originalname.split(".")[0]
-                }
-                filmImgArr[originalName] = file
-            })
-            const fileResCloud = {
-                img: [],
-                poster: "",
-                banner: ""
-            }
-            for (const fileName in filmImgArr) {
-                if (filmImgArr.hasOwnProperty(fileName)) {
-                    const filePath = filmImgArr[fileName].path;
-                    const filmUrl = await uploadImage(filePath, cloudinaryFolder);
-                    if (fileName === "poster") {
-                        fileResCloud.poster = filmUrl
-                    } else if (fileName === "banner") {
-                        fileResCloud.banner = filmUrl
+            if (!files){
+                // UPLOAD NEW IMAGE TO CLOUDINARY
+                const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
+                const filmImgArr = [];
+                files.forEach((file) => {
+                    var originalName = "";
+                    if (file.originalname.includes("poster")) {
+                        originalName = "poster"
+                    } else if (file.originalname.includes("banner")) {
+                        originalName = "banner"
                     } else {
-                        fileResCloud.img.push(filmUrl)
+                        originalName = file.originalname.split(".")[0]
+                    }
+                    filmImgArr[originalName] = file
+                })
+                const fileResCloud = {
+                    img: [],
+                    poster: "",
+                    banner: ""
+                }
+                for (const fileName in filmImgArr) {
+                    if (filmImgArr.hasOwnProperty(fileName)) {
+                        const filePath = filmImgArr[fileName].path;
+                        const filmUrl = await uploadImage(filePath, cloudinaryFolder);
+                        if (fileName === "poster") {
+                            fileResCloud.poster = filmUrl
+                        } else if (fileName === "banner") {
+                            fileResCloud.banner = filmUrl
+                        } else {
+                            fileResCloud.img.push(filmUrl)
+                        }
                     }
                 }
-            }
-            const data = {
-                image: fileResCloud,
-                plot: body.plot,
-                title: body.title,
-                fullplot: body.fullplot,
-                type: body.type,
-                released: body.released,
-                genres: body.genres,
-                cast: body.cast,
-                directors: body.directors
-            }
-
-            // DELETE IMAGE IN CLOUDINARY
-            const imgObj = existMovie.image
-            for (const key in imgObj) {
-                if (imgObj.hasOwnProperty(key)) {
-                    const url = imgObj[key]
-                    if (Array.isArray(url)) {
-                        url.map(async (u) => {
-                            const name = getName(u)
+                const data = {
+                    image: fileResCloud,
+                    plot: body.plot,
+                    title: body.title,
+                    fullplot: body.fullplot,
+                    type: body.type,
+                    released: body.released,
+                    genres: body.genres,
+                    cast: body.cast,
+                    directors: body.directors
+                }
+    
+                // DELETE IMAGE IN CLOUDINARY
+                const imgObj = existMovie.image
+                for (const key in imgObj) {
+                    if (imgObj.hasOwnProperty(key)) {
+                        const url = imgObj[key]
+                        if (Array.isArray(url)) {
+                            url.map(async (u) => {
+                                const name = getName(u)
+                                const result = "NetLeak/Film_Image/" + name
+                                await deleteImage(result)
+                            })
+                        } else {
+                            const name = getName(url)
                             const result = "NetLeak/Film_Image/" + name
                             await deleteImage(result)
-                        })
-                    } else {
-                        const name = getName(url)
-                        const result = "NetLeak/Film_Image/" + name
-                        await deleteImage(result)
+                        }
                     }
                 }
-            }
-            // DELETE IN DB
-            const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
+                // update IN DB
+                const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
 
-            return updatedFilm;
+                return updatedFilm;
+            }else {
+                const data = {
+                    image: existMovie.image,
+                    plot: body.plot,
+                    title: body.title,
+                    fullplot: body.fullplot,
+                    type: body.type,
+                    released: body.released,
+                    genres: body.genres,
+                    cast: body.cast,
+                    directors: body.directors
+                }
+
+                // UPDATE IN DB
+                const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
+
+                return updatedFilm;
+            }
+
         } catch (error) {
             return {
                 success: false,
