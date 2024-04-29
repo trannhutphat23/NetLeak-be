@@ -12,6 +12,10 @@ const cloudinary = require('../../configs/config.cloudinary')
 const upload = multer({ dest: 'uploads/' })
 const router = express.Router()
 
+multer({
+    limits: { fieldSize: 25 * 1024 * 1024 }
+  })
+
 // add new genre
 router.post('/genres', GenreController.addGenre)
 
@@ -46,7 +50,7 @@ router.get('/casts/:id', CastController.getCast)
 router.delete('/casts', CastController.deleteCast)
 
 // add new studio
-router.post('/studios', StudioController.addStudio)
+router.post('/studios', upload.single('avatar'), StudioController.addStudio)
 
 // list studios
 router.get('/studios', StudioController.getStudios)
@@ -55,7 +59,7 @@ router.get('/studios', StudioController.getStudios)
 router.get('/studios/:id', StudioController.getStudio)
 
 // delete studio by id
-router.delete('/studios/:id', StudioController.deleteStudio)
+router.delete('/studios', StudioController.deleteStudio)
 
 // add new film
 router.post('/films', upload.array('filmImg', 4), MovieController.addMovie)
@@ -67,13 +71,13 @@ router.get('/films', MovieController.getMovies)
 router.get('/films/:id', MovieController.getMovie)
 
 // update film by id
-router.put('/films/:id', MovieController.updateMovie)
+router.put('/films/:id', upload.array('filmImg', 4), MovieController.updateMovie)
 
 // delete film by id
 router.delete('/films', MovieController.deleteMovie)
 
 // get video of film
-router.get('/videos',upload.single(""),VideoController.getVideo)
+router.get('/videos/:filmId', VideoController.getVideo)
 
 // add new video of film
 router.post('/videos',upload.single(""), VideoController.addVideo)
@@ -95,5 +99,8 @@ router.get('/payments', PaymentController.listPayments)
 
 // get payment package by id
 router.get('/payments/:id', PaymentController.getPayment)
+
+// get revenue
+router.get('/revenue', AdminController.getRevenue)
 
 module.exports = router

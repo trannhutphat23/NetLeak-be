@@ -10,6 +10,7 @@ class CastService {
         try {
             const cloudinaryFolder = 'NetLeak/Cast_avatar';
             const avatarUrl = await uploadImage(filePath, cloudinaryFolder);
+           
             const newCast = new castModel({
                 avatar: avatarUrl,
                 name: body.name,
@@ -70,17 +71,25 @@ class CastService {
             const ID = query.id;
             const imgUrl = query.imageUrl
             
-            const name = getName(imgUrl)
-            const result = "NetLeak/Cast_Avatar/" + name
-            await deleteImage(result)
-
-            const cast = await castModel.findByIdAndDelete(ID)
+            const cast = await castModel.findById(ID)
             if (!cast){
                 return {
                     success: false,
                     message: "Cast not exist"
                 }
             }
+
+            if (imgUrl === cast.avatar){
+                const name = getName(imgUrl)
+                const result = "NetLeak/Cast_Avatar/" + name
+                await deleteImage(result)
+            }else {
+                return {
+                    success: false,
+                    message: "Cast avatar does not match this cast"
+                }
+            }
+            await castModel.findByIdAndDelete(ID)
             return {
                 success: true,
                 message: "Delete successfully"

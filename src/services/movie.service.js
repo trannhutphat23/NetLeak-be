@@ -28,7 +28,6 @@ class MovieService {
 
             const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
             const filmImgArr = [];
-            console.log(files)
             files.forEach((file) => {
                 var originalName = "";
                 if (file.originalname.includes("poster")) {
@@ -58,21 +57,22 @@ class MovieService {
                     }
                 }
             }
+            console.log(fileResCloud)
 
             const newMovie = new movieModel({
-                plot: body.plot,
-                genres: body.genres,
-                cast: body.cast,
-                image: fileResCloud,
-                title: body.title,
-                fullplot: body.fullplot,
-                released: body.released,
-                directors: body.directors,
-                imdb: { rating: null, vote: null },
-                type: body.type
+                "plot": body.plot,
+                "genres": body.genres,
+                "cast": body.cast,
+                "image": fileResCloud,
+                "title": body.title,
+                "fullplot": body.fullplot,
+                "released": body.released,
+                "directors": body.directors,
+                "imdb": { rating: null, vote: null },
+                "type": body.type
             })
 
-            const savedMovie = await newMovie.save();
+            const savedMovie = await newMovie.save()
 
             if (body.genres) {
                 var genre = await genreModel.find({ _id: { $in: body.genres } })
@@ -102,7 +102,7 @@ class MovieService {
                 .populate("cast"))
                 .populate("directors")
 
-            return NewMovie;
+            return savedMovie;
         } catch (error) {
             return {
                 success: false,
@@ -114,11 +114,9 @@ class MovieService {
     static getMovies = async () => {
         try {
             const Movies = await movieModel.find({})
-                .populate("genres")
                 .populate("cast")
-                .populate("directors")
-
-            return Movies;
+                
+            return Movies
         } catch (error) {
             return {
                 success: false,
@@ -130,9 +128,7 @@ class MovieService {
     static getMovie = async (params) => {
         try {
             const film = await movieModel.findById(params.id)
-                .populate('genres')
                 .populate('cast')
-                .populate('directors')
 
             return film;
         } catch (error) {
@@ -143,20 +139,102 @@ class MovieService {
         }
     }
 
-    static updateMovie = async (params = { id }, body = { plot, title, fullplot, type }) => {
+    static updateMovie = async (files, params = { id }, body = { plot, title, fullplot, type, released, genres, cast, directors }) => {
         try {
             const ID = params.id;
+            const existMovie = await movieModel.findById(ID)
+            if (!existMovie){
+                return {
+                    success: false,
+                    message: "Movie does not exist"
+                }
+            }
+            if (files.length!=0){
+                // UPLOAD NEW IMAGE TO CLOUDINARY
+                const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
+                const filmImgArr = [];
+                files.forEach((file) => {
+                    var originalName = "";
+                    if (file.originalname.includes("poster")) {
+                        originalName = "poster"
+                    } else if (file.originalname.includes("banner")) {
+                        originalName = "banner"
+                    } else {
+                        originalName = file.originalname.split(".")[0]
+                    }
+                    filmImgArr[originalName] = file
+                })
+                const fileResCloud = {
+                    img: [],
+                    poster: "",
+                    banner: ""
+                }
+                for (const fileName in filmImgArr) {
+                    if (filmImgArr.hasOwnProperty(fileName)) {
+                        const filePath = filmImgArr[fileName].path;
+                        const filmUrl = await uploadImage(filePath, cloudinaryFolder);
+                        if (fileName === "poster") {
+                            fileResCloud.poster = filmUrl
+                        } else if (fileName === "banner") {
+                            fileResCloud.banner = filmUrl
+                        } else {
+                            fileResCloud.img.push(filmUrl)
+                        }
+                    }
+                }
+                const data = {
+                    image: fileResCloud,
+                    plot: body.plot,
+                    title: body.title,
+                    fullplot: body.fullplot,
+                    type: body.type,
+                    released: body.released,
+                    genres: body.genres,
+                    cast: body.cast,
+                    directors: body.directors
+                }
+    
+                // DELETE IMAGE IN CLOUDINARY
+                const imgObj = existMovie.image
+                for (const key in imgObj) {
+                    if (imgObj.hasOwnProperty(key)) {
+                        const url = imgObj[key]
+                        if (Array.isArray(url)) {
+                            url.map(async (u) => {
+                                const name = getName(u)
+                                const result = "NetLeak/Film_Image/" + name
+                                await deleteImage(result)
+                            })
+                        } else {
+                            const name = getName(url)
+                            const result = "NetLeak/Film_Image/" + name
+                            await deleteImage(result)
+                        }
+                    }
+                }
+                // update IN DB
+                const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
 
-            const data = {
-                plot: body.plot,
-                title: body.title,
-                fullplot: body.fullplot,
-                type: body.type
+                return updatedFilm;
+            }else {
+                const data = {
+                    image: existMovie.image,
+                    plot: body.plot,
+                    title: body.title,
+                    fullplot: body.fullplot,
+                    type: body.type,
+                    released: body.released,
+                    genres: body.genres,
+                    cast: body.cast,
+                    directors: body.directors
+                }
+
+                // UPDATE IN DB
+                const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
+
+                return updatedFilm;
             }
 
-            const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
-
-            return updatedFilm;
         } catch (error) {
             return {
                 success: false,

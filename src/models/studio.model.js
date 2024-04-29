@@ -4,6 +4,10 @@ const DOCUMENT_NAME = 'Studio'
 const COLLECTION_NAME = 'Studios'
 
 var studioSchema = new Schema({
+    avatar: {
+        type: String,
+        require: true,
+    },
     name: {
         type: String,
         required: true,

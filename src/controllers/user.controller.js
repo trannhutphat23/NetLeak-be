@@ -1,5 +1,6 @@
 const UserService = require('../services/user.service')
 const MovieService = require('../services/movie.service')
+const PaymentService = require('../services/payment.service')
 
 class UserController {
     // list all users
@@ -154,10 +155,15 @@ class UserController {
 
     payment = async (req, res, next) => {
         try {
-            return (req.body.type === "momo") ? 
-                res.status(201).json(await UserService.paymentByMoMo(req.body))
-                :
-                res.status(201).json(await UserService.paymentByVNPay(req.body))
+            return res.status(201).json(await PaymentService.paymentByMoMo(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
+
+    addPayment = async (req, res, next) => {
+        try {
+            return res.status(201).json(await PaymentService.addPayment(req.body))
         } catch (error){
             next(error)
         }

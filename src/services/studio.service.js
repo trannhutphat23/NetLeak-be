@@ -1,11 +1,16 @@
 const studioModel = require("../models/studio.model");
+const uploadImage = require('../utils/uploadImage')
+const deleteImage = require('../utils/deleteImage')
+const getName = require('../utils/getNameImage')
 const getData = require('../utils/formatRes');
 const _ = require('lodash');
 
 class StudioService {
-    static addStudio = async ({name}) => {
+    static addStudio = async (filePath, body) => {
         try {
-            const existStudio = await studioModel.findOne({name}).lean()
+            const cloudinaryFolder = 'NetLeak/Studio_Avatar';
+            const avatarUrl = await uploadImage(filePath, cloudinaryFolder);
+            const existStudio = await studioModel.findOne({name: body.name}).lean()
 
             if (existStudio) {
                 return {
@@ -14,7 +19,10 @@ class StudioService {
                 }
             }
 
-            const newStudio = new studioModel({name})
+            const newStudio = new studioModel({
+                avatar: avatarUrl,
+                name: body.name,
+            })
 
             return await newStudio.save()
         } catch (error) {
@@ -33,7 +41,7 @@ class StudioService {
             }).lean()
 
             return _.map(studios, obj => getData({ 
-                fields: ["_id", "name", "movies"], 
+                fields: ["_id", "avatar", "name", "movies"], 
                 object: obj }))
 
         } catch (error) {
@@ -54,7 +62,7 @@ class StudioService {
                 }
             }
             return getData({ 
-                fields: ["_id", "name", "movies"], 
+                fields: ["_id", "avatar", "name", "movies"], 
                 object: studio });
         } catch (error) {
             return {
@@ -64,15 +72,30 @@ class StudioService {
         }
     }
 
-    static deleteStudio = async ({id}) => {
+    static deleteStudio = async (query) => {
         try {
-            const studio = await studioModel.findByIdAndDelete(id)
+            const ID = query.id;
+            const imgUrl = query.imageUrl
+            
+            const studio = await studioModel.findById(ID)
             if (!studio){
                 return {
                     success: false,
                     message: "Studio does not exist"
                 }
             }
+
+            if (imgUrl === studio.avatar){
+                const name = getName(imgUrl)
+                const result = "NetLeak/Studio_Avatar/" + name
+                await deleteImage(result)
+            }else{
+                return {
+                    success: false,
+                    message: "Studio avatar does not match this studio"
+                }
+            }
+            await studioModel.findByIdAndDelete(ID)
             return {
                 success: true,
                 message: "Delete successfully"

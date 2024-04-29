@@ -28,6 +28,12 @@ var paymentScheme = new Schema({
     },
     expired: {
         type: Date,
+        default: () => {
+            var currentDate = new Date();
+            var nextMonth = new Date(currentDate);
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            return nextMonth;
+        }
     }
 }, {
     timestamps: true,
