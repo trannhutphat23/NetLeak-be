@@ -33,6 +33,8 @@ router.get('/favorite', AuthService.verifyToken, UserController.getFavoriteFilm)
 router.post('/favorite', AuthService.verifyToken, UserController.addFavoriteFilm)
 // delete favorite film
 router.delete('/favorite', AuthService.verifyToken, UserController.deleteFavoriteFilm)
+// get recommend list film from favorite list film
+router.get('/recommendFavorite/:userId', AuthService.verifyToken, UserController.getRecommendFromFavorite)
 // get recommend list film from history list film
 router.get('/recommend', AuthService.verifyToken, UserController.getRecommend)
 // add to history view

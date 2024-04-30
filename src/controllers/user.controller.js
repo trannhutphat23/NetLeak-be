@@ -129,6 +129,15 @@ class UserController {
         }
     }
 
+    getRecommendFromFavorite = async (req, res, next) => {
+        try {
+            console.log(req.params)
+            return res.status(201).json(await MovieService.getRecommendFromFavorite(req.params))
+        } catch (error){
+            next(error)
+        }
+    }
+
     addHistory = async (req, res, next) => {
         try {
             return res.status(201).json(await UserService.addHistory(req.body))

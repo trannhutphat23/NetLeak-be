@@ -115,7 +115,7 @@ class MovieService {
         try {
             const Movies = await movieModel.find({})
                 .populate("cast")
-                
+
             return Movies
         } catch (error) {
             return {
@@ -143,13 +143,13 @@ class MovieService {
         try {
             const ID = params.id;
             const existMovie = await movieModel.findById(ID)
-            if (!existMovie){
+            if (!existMovie) {
                 return {
                     success: false,
                     message: "Movie does not exist"
                 }
             }
-            if (files.length!=0){
+            if (files.length != 0) {
                 // UPLOAD NEW IMAGE TO CLOUDINARY
                 const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
                 const filmImgArr = [];
@@ -193,7 +193,7 @@ class MovieService {
                     cast: body.cast,
                     directors: body.directors
                 }
-    
+
                 // DELETE IMAGE IN CLOUDINARY
                 const imgObj = existMovie.image
                 for (const key in imgObj) {
@@ -216,7 +216,7 @@ class MovieService {
                 const updatedFilm = await movieModel.findByIdAndUpdate(ID, data, { new: true });
 
                 return updatedFilm;
-            }else {
+            } else {
                 const data = {
                     image: existMovie.image,
                     plot: body.plot,
@@ -319,7 +319,7 @@ class MovieService {
         }
     }
 
-    static ratingFilm = async ({emailId, filmId, rate}) => {
+    static ratingFilm = async ({ emailId, filmId, rate }) => {
         try {
             const user = await userModel.findById(emailId)
             const film = await movieModel.findById(filmId)
@@ -435,7 +435,7 @@ class MovieService {
             }
             const savedFilm = await savedMovieModel.findOne({ userId: user._id })
 
-            if (!savedFilm){
+            if (!savedFilm) {
                 return {
                     success: false,
                     message: "No films have been saved"
@@ -443,7 +443,7 @@ class MovieService {
             }
             const formatSavedFilm = await savedFilm.populate("filmId")
 
-            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatSavedFilm});
+            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatSavedFilm });
         } catch (error) {
             return {
                 success: false,
@@ -539,6 +539,92 @@ class MovieService {
         }
     }
 
+    static getRecommendFromFavorite = async ({ userId }) => {
+        try {
+            const user = await userModel.findById(userId).populate('favorites')
+            if (!user) {
+                return {
+                    sucess: false,
+                    message: "User does not exist"
+                }
+            }
+
+            const favoriteFilm = user.favorites
+
+            const allFilms = await movieModel.find()
+
+            let recommendedFilms = []
+
+            if (favoriteFilm.length != 0) {
+
+                let genreList = []
+
+                // favoriteFilm.splice(0, favoriteFilm.length - 30)
+
+                favoriteFilm.forEach((film) => {
+                    genreList = [...genreList, ...film.genres]
+                })
+
+                //de xuat 15 bo
+                for (let i = 0; i < 15; i++) {
+                    //NÀY CHƯA CÓ DATA NÊN TEST
+                    // for (let i = 0; i < 2; i++) {
+                    const ranNumGenre = Math.floor(Math.random() * genreList.length)
+
+                    do {
+                        const ranNumFilm = Math.floor(Math.random() * allFilms.length)
+
+                        if (allFilms[ranNumFilm].genres.some(genre => genre.toString() == genreList[ranNumGenre].toString())) {
+                            if (
+                                recommendedFilms.some(id => {
+                                    return id.toString() == allFilms[ranNumFilm]._id.toString()
+                                })
+                            ) { }
+                            else {
+                                recommendedFilms.push(allFilms[ranNumFilm]._id)
+                                break
+                            }
+                        }
+
+                    }
+                    while (true)
+                }
+            }
+            else {
+                for (let i = 0; i < 15; i++) {
+                    //NÀY CHƯA CÓ DATA NÊN TEST
+                    // for (let i = 0; i < 2; i++) {
+                    // const ranNumGenre = Math.floor(Math.random() * genreList.length)
+
+                    do {
+                        const ranNumFilm = Math.floor(Math.random() * allFilms.length)
+
+                        // if (allFilms[ranNumFilm].genres.some(genre => genre.toString() == genreList[ranNumGenre].toString())) {
+                            if (
+                                recommendedFilms.some(id => {
+                                    return id.toString() == allFilms[ranNumFilm]._id.toString()
+                                })
+                            ) { }
+                            else {
+                                recommendedFilms.push(allFilms[ranNumFilm]._id)
+                                break
+                            }
+                        // }
+
+                    }
+                    while (true)
+                }
+            }
+
+            return recommendedFilms
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
+
     static getHistoryFilm = async (params) => {
         try {
             const ID = params.id
@@ -550,9 +636,9 @@ class MovieService {
                     message: "User does not exist"
                 }
             }
-            const historyFilm = await historyModel.findOne({userId: user._id})
+            const historyFilm = await historyModel.findOne({ userId: user._id })
 
-            if (!historyFilm){
+            if (!historyFilm) {
                 return {
                     success: false,
                     message: "No films have been saved"
@@ -560,25 +646,25 @@ class MovieService {
             }
             const formatHistoryFilm = await historyFilm.populate("filmId")
 
-            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatHistoryFilm});
+            return getData({ fields: ['_id', 'userId', 'filmId'], object: formatHistoryFilm });
         } catch (error) {
             return {
                 success: false,
                 message: error.message
-            } 
+            }
         }
     }
 
-    static getRecommend = async ({userId}) => {
+    static getRecommend = async ({ userId }) => {
         try {
             const user = await userModel.findById(userId)
-            if (!user){
+            if (!user) {
                 return {
                     sucess: false,
                     message: "User does not exist"
                 }
             }
-            const rcmFilm = await historyModel.findOne({userId: user._id})
+            const rcmFilm = await historyModel.findOne({ userId: user._id })
             const formatRcmFilm = await rcmFilm.populate("filmId")
             const detailFilmArr = formatRcmFilm.filmId.map((film) => {
                 return film
@@ -590,13 +676,13 @@ class MovieService {
             await Promise.all(genresIdArr.map(async (genre) => {
                 await Promise.all(genre.map(async (gen) => {
                     const existGen = await genreModel.findById(gen)
-                    if (existGen){
+                    if (existGen) {
                         genresArr.push(existGen.title)
                     }
                 }))
             }))
 
-            const genres = await genreModel.find({title: {$in: genresArr}})
+            const genres = await genreModel.find({ title: { $in: genresArr } })
 
             return {
                 film: formatRcmFilm.filmId
