@@ -196,8 +196,16 @@ class UserController {
 
     getFilmByRating = async (req, res, next) => {
         try {
-            return res.status(201).json(await MovieService.getFilmByRating(req.body))
+            return res.status(201).json(await MovieService.getFilmByRating())
         } catch (error){
+            next(error)
+        }
+    }
+
+    getRatings = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getRatings())
+        } catch (error) {
             next(error)
         }
     }

@@ -15,6 +15,8 @@ router.get('/video',AuthService.verifyToken,UserController.getVideo)
 router.get('/films/detailFilm', AuthService.verifyToken, UserController.getDetailFilm)
 // filter film by genre
 router.get('/films', AuthService.verifyToken, UserController.getFilmsByGenres)
+// list rating
+router.get('/ratings', AuthService.verifyToken, UserController.getRatings)
 // rating film
 router.post('/rating', AuthService.verifyToken, UserController.ratingFilm)
 // delete rating film

@@ -712,6 +712,19 @@ class MovieService {
             }
         }
     }
+
+    static getRatings = async () => {
+        try {
+            const ratings = await ratingModel.find({})
+
+            return ratings;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
 }
 
 module.exports = MovieService;
