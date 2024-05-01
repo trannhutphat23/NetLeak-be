@@ -30,7 +30,7 @@ class GenreService {
         try {
             const Genres = await genreModel.find({}).populate({
                 path: "movies",
-                select: '_id image plot title fullplot released lastupdated type'
+                select: '_id image plot title fullplot released lastupdated type genres imdb'
             }).lean();
 
             return _.map(Genres, obj => getData({ 

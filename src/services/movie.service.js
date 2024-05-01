@@ -114,7 +114,7 @@ class MovieService {
     static getMovies = async () => {
         try {
             const Movies = await movieModel.find({})
-                .populate("cast")
+                .populate("cast").populate("genres").populate("directors")
 
             return Movies
         } catch (error) {
@@ -128,7 +128,7 @@ class MovieService {
     static getMovie = async (params) => {
         try {
             const film = await movieModel.findById(params.id)
-                .populate('cast')
+                .populate('cast').populate("genres").populate("directors")
 
             return film;
         } catch (error) {
@@ -143,12 +143,14 @@ class MovieService {
         try {
             const ID = params.id;
             const existMovie = await movieModel.findById(ID)
+            
             if (!existMovie) {
                 return {
                     success: false,
                     message: "Movie does not exist"
                 }
             }
+
             if (files.length != 0) {
                 // UPLOAD NEW IMAGE TO CLOUDINARY
                 const cloudinaryFolder = process.env.FOLDER_IMAGE_FILM;
