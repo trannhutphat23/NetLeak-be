@@ -105,7 +105,7 @@ class AccessService {
 
             return {
                 success: true,
-                accessToken,
+                accessToken: accessToken,
             }
             
         } catch (error) {
