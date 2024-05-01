@@ -72,14 +72,14 @@ class AccessService {
             const existUser = await userModel.findOne({email})
             if (!existUser) {
                 return {
-                    statusCode: 201,
+                    success: false,
                     message: "User not registered"
                 }
             }
             const match = await bcrypt.compare(password, existUser.password);
             if (!match) {
                 return {
-                    statusCode: 401,
+                    success: false,
                     message: 'Wrong Password'
                 }
             }
