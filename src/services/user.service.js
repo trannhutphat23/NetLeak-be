@@ -426,6 +426,9 @@ class UserService {
                 const historyFilm = await historyModel.findOneAndUpdate({ userId: user._id, filmId: { $nin: [film._id] } }, {
                     $push: { filmId: film._id }
                 });
+
+                
+
                 if (historyFilm) {
                     const formatHistoryFilm = await (await historyFilm.populate({
                         path: "filmId",
@@ -437,10 +440,28 @@ class UserService {
                     })
                     return getData({ fields: ['_id', 'userId', 'filmId'], object: formatHistoryFilm });
                 }
-                return {
-                    success: false,
-                    message: "Film already stored in history"
+                else{
+                    const haveHistoryFilm = await historyModel.findOne({ userId: user._id})
+                
+                    haveHistoryFilm.filmId.forEach((id, index) => {
+                        if(id.toString() == filmId.toString()){
+                            haveHistoryFilm.filmId.splice(index, 1);
+                            haveHistoryFilm.filmId.unshift(filmId)
+
+                        }
+                    })
+                    await haveHistoryFilm.save()
+
+                    return {
+                        success: true,
+                        message: "Film already stored in history"
+                    }
                 }
+                // const HistoryFilm = await movieModel.findById({$in: existHistoryFilm.filmId})
+                // return {
+                //     success: false,
+                //     message: "Film already stored in history"
+                // }
             } else {
                 const newHistoryFilm = new historyModel({
                     userId: user._id,
