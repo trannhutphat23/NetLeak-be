@@ -193,6 +193,14 @@ class UserController {
             next(error)
         }
     }
+
+    getFilmByRating = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getFilmByRating(req.body))
+        } catch (error){
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();

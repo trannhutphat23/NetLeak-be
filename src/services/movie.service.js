@@ -696,6 +696,22 @@ class MovieService {
             }
         }
     }
+
+    static getFilmByRating = async () => {
+        try {
+            const allFilms = await movieModel.aggregate([
+                { 
+                    $sort: {"imdb.rating": -1}
+                }
+            ])
+            return allFilms;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
 }
 
 module.exports = MovieService;
