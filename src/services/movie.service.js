@@ -742,7 +742,8 @@ class MovieService {
             const uniqueSet = new Set(resArr);
 
             const uniqueArray = Array.from(uniqueSet);
-            const allFilms = await movieModel.find({_id: {$in: uniqueArray}})
+            const shuffleArray = _.shuffle(uniqueArray);
+            const allFilms = await movieModel.find({_id: {$in: shuffleArray}})
 
             const resAllFilms =  allFilms.filter((e, index)=> {
                 if (index < 10) return e;
