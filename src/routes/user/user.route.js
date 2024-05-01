@@ -50,6 +50,6 @@ router.delete('/historyFilm', AuthService.verifyToken, UserController.deleteHist
 // payment
 router.post('/payment', UserController.payment)
 // add a new payment
-router.post('/payment/add', AuthService.verifyToken, UserController.addPayment)
+router.post('/payment/add', UserController.addPayment)
 
 module.exports = router
