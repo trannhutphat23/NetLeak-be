@@ -209,6 +209,14 @@ class UserController {
             next(error)
         }
     }
+
+    getRecommendByGenre = async (req, res, next) => {
+        try {
+            return res.status(201).json(await MovieService.getRecommendByGenre(req.params))
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 module.exports = new UserController();

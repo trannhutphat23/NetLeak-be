@@ -41,6 +41,8 @@ router.delete('/favorite', AuthService.verifyToken, UserController.deleteFavorit
 router.get('/recommendFavorite/:userId', AuthService.verifyToken, UserController.getRecommendFromFavorite)
 // get recommend list film from history list film
 router.get('/recommend', AuthService.verifyToken, UserController.getRecommend)
+// get recommend list film by genre
+router.get('/recommend/genre/:id', AuthService.verifyToken, UserController.getRecommendByGenre)
 // add to history view
 router.post('/history', AuthService.verifyToken, UserController.addHistory)
 // get film in history by user_id

@@ -725,6 +725,37 @@ class MovieService {
             }
         }
     }
+
+    static getRecommendByGenre = async ({id}) => {
+        try {
+            const existFilm = await movieModel.findById(id).populate('genres')
+            if (!existFilm){
+                return {
+                    success: false,
+                    message: "Film does not exist"
+                }
+            }
+            const genres = existFilm.genres.map((genre) => {
+                return genre.movies
+            })
+            const resArr = genres.reduce((acc, curr) => acc.concat(curr), []);
+            const uniqueSet = new Set(resArr);
+
+            const uniqueArray = Array.from(uniqueSet);
+            const allFilms = await movieModel.find({_id: {$in: uniqueArray}})
+
+            const resAllFilms =  allFilms.filter((e, index)=> {
+                if (index < 10) return e;
+            });   
+
+            return resAllFilms;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.message
+            }
+        }
+    }
 }
 
 module.exports = MovieService;
