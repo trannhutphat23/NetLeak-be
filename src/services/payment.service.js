@@ -135,7 +135,7 @@ class PaymentService {
             var redirectUrl = 'https://google.com'; // Link chuyển hướng tới sau khi thanh toán hóa đơn
             var ipnUrl = 'https://google.com';   //trang truy vấn kết quả, để trùng với redirect
             var requestType = "payWithMethod";
-            var amount = '1000'; // Lượng tiền của hóa  <lượng tiền test ko dc cao quá>
+            // var amount = '1000'; // Lượng tiền của hóa  <lượng tiền test ko dc cao quá>
             var orderId = partnerCode + new Date().getTime(); // mã Đơn hàng, có thể đổi
             var requestId = orderId;
             var extraData =''; // đây là data thêm của doanh nghiệp (địa chỉ, mã COD,....)
