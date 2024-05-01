@@ -346,7 +346,7 @@ class MovieService {
 
                 const avgRate = result[0].averageRate;
 
-                await movieModel.findOneAndUpdate({ _id: film._id }, { imdb: { rating: avgRate, vote: film.imdb.vote } })
+                await movieModel.findOneAndUpdate({ _id: film._id }, { imdb: { rating: (avgRate*film.imdb.vote + rate)/(film.imdb.vote+1) , vote: film.imdb.vote } })
 
                 return (await rating.populate({
                     path: "email",
