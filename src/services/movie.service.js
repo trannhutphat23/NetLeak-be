@@ -735,21 +735,18 @@ class MovieService {
                     message: "Film does not exist"
                 }
             }
-            const genres = existFilm.genres.map((genre) => {
+            const movies = existFilm.genres.map((genre) => {
                 return genre.movies
             })
-            const resArr = genres.reduce((acc, curr) => acc.concat(curr), []);
-            const uniqueSet = new Set(resArr);
+            const resArr = movies.reduce((acc, curr) => acc.concat(curr), []);
+            const shuffleArray = _.shuffle(resArr)
+            const uniqueSet = new Set(shuffleArray);
 
             const uniqueArray = Array.from(uniqueSet);
-            const shuffleArray = _.shuffle(uniqueArray);
-            const allFilms = await movieModel.find({_id: {$in: shuffleArray}})
+            const sliceArray = uniqueArray.slice(0,10);
+            const allFilms = await movieModel.find({_id: {$in: sliceArray}})   
 
-            const resAllFilms =  allFilms.filter((e, index)=> {
-                if (index < 10) return e;
-            });   
-
-            return resAllFilms;
+            return allFilms;
         } catch (error) {
             return {
                 success: false,
