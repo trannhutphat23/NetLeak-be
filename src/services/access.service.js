@@ -24,12 +24,12 @@ class AccessService {
             const passwordHash = await bcrypt.hash(password, salt)
 
             const newUser = await userModel.create({
-                email: email,
-                password: passwordHash,
-                name: name,
-                sexuality: sexuality,
-                phone: phone,
-                roles: role.USER
+                "email": email,
+                "password": passwordHash,
+                "name": name,
+                "sexuality": sexuality,
+                "phone": phone,
+                "roles": role.USER
             })
 
             var transporter = nodemailer.createTransport({
