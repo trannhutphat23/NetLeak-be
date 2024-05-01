@@ -105,7 +105,6 @@ class AccessService {
 
             return {
                 success: true,
-                user: getData({fields: ['_id', 'email', 'favorites', 'roles'], object: existUser}),
                 accessToken,
             }
             
