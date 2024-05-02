@@ -26,7 +26,7 @@ class UserService {
         }
     }
     // [PATCH]/v1/api/user/updatePassword
-    static updatePassword = async ({ id, password }) => {
+    static updatePassword = async ({ id, oldPassword, newPassword }) => {
         try {
             const existUser = await userModel.findById(id);
             if (!existUser) {
@@ -35,7 +35,7 @@ class UserService {
                 }
             }
 
-            const match = await bcrypt.compare(password, existUser.password);
+            const match = await bcrypt.compare(oldPassword, existUser.password);
             if (!match) {
                 return {
                     success: false,
@@ -44,7 +44,7 @@ class UserService {
             }
 
             const salt = await bcrypt.genSalt()
-            const newPasswordHash = await bcrypt.hash(password, salt)
+            const newPasswordHash = await bcrypt.hash(newPassword, salt)
 
             await userModel.updateOne({ _id: id }, {
                 $set: { password: newPasswordHash }
