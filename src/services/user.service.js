@@ -35,6 +35,14 @@ class UserService {
                 }
             }
 
+            const match = await bcrypt.compare(password, existUser.password);
+            if (!match) {
+                return {
+                    success: false,
+                    message: 'Wrong Password'
+                }
+            }
+
             const salt = await bcrypt.genSalt()
             const newPasswordHash = await bcrypt.hash(password, salt)
 
@@ -52,7 +60,7 @@ class UserService {
 
     }
     
-    static updateAccount = async ({id}, {name, sexuality, phone}) => {
+    static updateAccount = async ({id}, {name, sexuality, phone, email}) => {
         try {
             if (id.length > 24) {
                 return {
@@ -72,7 +80,8 @@ class UserService {
             const data = {
                 name: name,
                 sexuality: sexuality,
-                phone: phone
+                phone: phone,
+                email: email
             }
 
             const updatedUser = await userModel.findByIdAndUpdate(existUser._id, data, { new: true })
