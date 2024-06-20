@@ -1,3 +1,4 @@
+- Link File env: https://drive.google.com/file/d/1Ns7RUGu1wdx4frbrFwCcnrI4v6FpC4tf/view?usp=sharing
 - Tải package: npm i
 - Chạy server: npm start (npm --watch start)
 - API DOCS: http://localhost:8081/docs
